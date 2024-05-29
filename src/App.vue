@@ -1,29 +1,38 @@
 <script setup>
-// import { ref } from 'vue'
+import { onBeforeMount } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import firebase from 'firebase/compat/app'
+// import 'firebase/compat/auth'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
-// const open = ref(false)
-// const example = ref('i want to make decision');
+console.log(firebase)
+
+const router = useRouter()
+const route = useRoute()
+
+onBeforeMount(() => {
+  const auth = getAuth()
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      router.replace('/login')
+    } else if (route.path == '/login' || route.path == '/signup') {
+      router.replace('/todos')
+    }
+  })
+})
 </script>
 
 <template>
   <nav>
-    <ul>
-      <router-link to="/">Home</router-link>
+    <!-- <ul>
+      <router-link to="/login">Login</router-link>
       <router-link to="/about">About</router-link>
-    </ul>
+      <router-link to="/todos">ToDos</router-link>
+    </ul> -->
   </nav>
   <main>
     <router-view />
   </main>
-
-  <!-- <button @click="open = true">Open Modal</button>
-
-  <Teleport to="body">
-    <div v-if="open" class="modal">
-      <p>Hello from the modal!</p>
-      <button @click="open = false">Close</button>
-    </div>
-  </Teleport> -->
 </template>
 
 <style scoped>
@@ -32,37 +41,5 @@ header {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-}
-.modal {
-  position: fixed;
-  z-index: 999;
-  background-color: aquamarine;
-  top: 20%;
-  left: 50%;
-  width: 300px;
-  margin-left: -150px;
-}
-button {
-  margin-top: 50px;
-}
-header .wrapper {
-  display: flex;
-  place-items: flex-start;
-  flex-wrap: wrap;
-}
-.modal {
-  position: fixed;
-  z-index: 999;
-  top: 20%;
-  left: 50%;
-  width: 300px;
-  margin-left: -150px;
-}
-.meta {
-  font-size: 0.8em;
-  color: #42b883;
-}
-
-@media (min-width: 1024px) {
 }
 </style>
