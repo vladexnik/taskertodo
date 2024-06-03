@@ -12,9 +12,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "firebase": "9.1",
     "vue": "^3.4.27",
-    "vue-router": "^4.3.2"
+    "vue-router": "^4.3.2",
+    "vuex": "^4.0.2"
   },
   "lint-staged": {
     "*.ts": "npx tsc --noEmit",

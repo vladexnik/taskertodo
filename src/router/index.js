@@ -1,17 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../components/views/HomePage.vue'
-import AboutPage from '../components/views/AboutPage.vue'
 import LogIn from '../components/auth/LogIn.vue'
 import SignUp from '../components/auth/SignUp.vue'
 import ToDos from '../components/views/ToDos.vue'
+import TodoEdit from '../components/views/TodoEdit.vue'
 
 const routes = [
-  { path: '/', name: 'HomePage', component: HomePage },
   { path: '/login', name: 'LogIn', component: LogIn },
   { path: '/signup', name: 'SignUp', component: SignUp },
-  { path: '/about', name: 'About', component: AboutPage },
-  { path: '/todos', name: 'ToDos', component: ToDos }
-  // { path: '/', name: 'Home', component: HomePage }
+  { path: '/', name: 'ToDos', component: ToDos },
+  { path: '/todos/:id', name: 'TodoEdit', component: TodoEdit },
+  { path: '/todos/newtodo', name: 'TodoNew', component: TodoEdit }
 ]
 
 const router = createRouter({

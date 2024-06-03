@@ -1,61 +1,87 @@
 <script setup>
 defineProps(['title', 'btn', 'text', 'link', 'action'])
-import { ref, computed } from 'vue'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { showErrorMessageSignIn } from '../../utils/errMessages.js'
+import { useStore } from 'vuex'
 
 const email = ref('')
 const password = ref('')
+const errMsg = ref('')
+const store = useStore()
+const router = useRouter()
 
-const SignUp = () => {
-  const auth = getAuth()
-  createUserWithEmailAndPassword(auth, email.value, password.value)
-    .then((userCredential) => {
-      const user = userCredential.user
-      console.log(user)
-    })
-    .catch((error) => {
-      alert(error.message)
-    })
+const handleSubmitSignUp = async () => {
+  try {
+    await store.dispatch('signup', { email: email.value, password: password.value })
+    router.push('/')
+  } catch (error) {
+    showErrorMessageSignIn(error, errMsg)
+  }
 }
-const Login = () => {
-  const auth = getAuth()
-  signInWithEmailAndPassword(auth, email.value, password.value)
-    .then((userCredential) => {
-      const user = userCredential.user
-      console.log(user)
-    })
-    .catch((error) => {
-      alert(error.message)
-    })
+
+const handleSubmitLogin = async () => {
+  try {
+    await store.dispatch('login', { email: email.value, password: password.value })
+    router.push('/')
+  } catch (error) {
+    showErrorMessageSignIn(error, errMsg)
+  }
 }
+
+// const SignUp = () => {
+//   const auth = getAuth()
+//   createUserWithEmailAndPassword(auth, email.value, password.value)
+//     .then((userCredential) => {
+//       const user = userCredential.user
+//       store.dispatch('signup', { email: email.value, password: password.value })
+//       console.log(user)
+//     })
+//     .catch((error) => {
+//       showErrorMessageSignIn(error, errMsg)
+//     })
+// }
+// const Login = () => {
+//   const auth = getAuth()
+//   signInWithEmailAndPassword(auth, email.value, password.value)
+//     .then((userCredential) => {
+//       const user = userCredential.user
+//       console.log(user)
+//     })
+//     .catch((error) => {
+//       showErrorMessageSignIn(error, errMsg)
+//     })
+// }
+
 const route = useRoute()
-const currentPath = computed(() => route.path)
-console.log(route.path, currentPath)
-
-const formAction = computed(() => (route.path === '/login' ? Login() : SignUp()))
+const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handleSubmitSignUp())
 </script>
 
 <template>
-  <div class="wrapper">
-    <div class="title">{{ title }}</div>
-    <form @submit.prevent="formAction">
-      <div class="field">
-        <input type="text" placeholder="Email Address" v-model="email" required />
-        <label></label>
-      </div>
-      <div class="field">
-        <input type="password" placeholder="Password" v-model="password" required />
-      </div>
-      <div class="field btn">
-        <input type="submit" :value="btn" />
-      </div>
-      <div class="signup-link">
-        {{ text }}
-        <router-link :to="link">{{ action }} now</router-link>
-      </div>
-    </form>
-  </div>
+  <Suspense>
+    <div class="wrapper">
+      <div class="title">{{ title }}</div>
+      <form @submit.prevent="formAction">
+        <div class="field">
+          <input type="text" placeholder="Email Address" v-model="email" required />
+          <label></label>
+        </div>
+        <div class="field">
+          <input type="password" placeholder="Password" v-model="password" required />
+        </div>
+        <p class="message" v-if="errMsg">{{ errMsg }}</p>
+
+        <div class="field btn">
+          <input type="submit" :value="btn" />
+        </div>
+        <div class="signup-link">
+          {{ text }}
+          <router-link :to="link">{{ action }} now</router-link>
+        </div>
+      </form>
+    </div>
+    <template #fallback> Загрузка... </template>
+  </Suspense>
 </template>
 
 <style scoped>
@@ -141,5 +167,12 @@ form .signup-link a {
 form .pass-link a:hover,
 form .signup-link a:hover {
   text-decoration: underline;
+}
+
+.message {
+  text-align: left;
+  padding-left: 10px;
+  font-weight: 600;
+  color: red;
 }
 </style>

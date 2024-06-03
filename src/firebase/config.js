@@ -1,8 +1,3 @@
-import './assets/main.css'
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './components/store'
 import * as firebase from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 
@@ -21,5 +16,3 @@ firebase.initializeApp(firebaseConfig)
 const auth = getAuth()
 
 export { auth }
-
-createApp(App).use(router).use(store).mount('#app')
