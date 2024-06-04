@@ -2,17 +2,25 @@
 const props = defineProps({
   todo: Object
 })
+const model = defineModel()
+
+// const emit = defineEmits(['complete'])
+// const updateChecked = (id, checked) => {
+//   emit('update:checked', id, checked)
+// }
+
+console.log(props, 'props')
 </script>
 
 <template>
   <li class="main__task-item">
     <div class="round">
-      <input type="checkbox" :id="props.todo.id" checked="false" />
+      <input type="checkbox" :id="props.todo.id" :value="props.todo.checked" v-model="model" />
       <label :for="props.todo.id"></label>
     </div>
-    <router-link :to="`/todos/${props.todo.id}`">
-      <span class="title">{{ props.todo.title }} </span>
-    </router-link>
+    <div @click="$router.push(`/todo/${props.todo.id}`)" class="route">
+      <span class="title">{{ props.todo.title }}</span>
+    </div>
   </li>
 </template>
 
@@ -20,7 +28,7 @@ const props = defineProps({
 .main__task-item {
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 15px;
 }
 
 .title {
@@ -31,6 +39,7 @@ const props = defineProps({
 
 .round {
   position: relative;
+  transform: translateY(5px);
 }
 .round label {
   background-color: #fff;
@@ -69,5 +78,9 @@ const props = defineProps({
 
 .round input[type='checkbox']:checked + label:after {
   opacity: 1;
+}
+
+.route:hover {
+  cursor: pointer;
 }
 </style>

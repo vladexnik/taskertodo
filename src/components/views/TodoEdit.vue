@@ -1,11 +1,23 @@
 <script setup>
-import router from '@/router'
-import { ref, watch } from 'vue'
-defineProps({
-  id: Number,
-  title: String,
-  description: String
+import { onMounted, onUpdated, ref, watch } from 'vue'
+// import router from '@/router'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+let route = useRoute()
+const readonlybool = ref(route.path === '/todo/newtodo' ? false : true)
+onMounted(() => {
+  console.log(route.path)
 })
+
+onUpdated(() => {
+  console.log(readonlybool)
+})
+// const props = defineProps({
+//   id: Number,
+//   title: String,
+//   description: String
+// })
 
 const newTitle = ref('')
 const newDescription = ref('')
@@ -43,10 +55,10 @@ watch(() => {
       <label class="form-item__label">
         Task Title:
         <input
-          v-model="newTitle"
           type="text"
           name="title"
           class="form-item__input-title form-item__input"
+          :readonly="readonlybool"
         />
       </label>
 
@@ -59,6 +71,7 @@ watch(() => {
           class="form-item__input-description form-item__input"
           rows="20"
           columns="20"
+          :readonly="readonlybool"
         />
       </label>
     </form>
@@ -80,7 +93,7 @@ watch(() => {
           />
         </svg>
       </button>
-      <button type="button" class="buttons__btn update">
+      <button type="button" class="buttons__btn update" @click="readonlybool == false">
         <svg
           class="w-6 h-6 text-gray-800 dark:text-white"
           aria-hidden="true"

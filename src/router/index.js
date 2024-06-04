@@ -8,8 +8,8 @@ const routes = [
   { path: '/login', name: 'LogIn', component: LogIn },
   { path: '/signup', name: 'SignUp', component: SignUp },
   { path: '/', name: 'ToDos', component: ToDos },
-  { path: '/todos/:id', name: 'TodoEdit', component: TodoEdit },
-  { path: '/todos/newtodo', name: 'TodoNew', component: TodoEdit }
+  { path: '/todo/:id', name: 'TodoEdit', component: TodoEdit },
+  { path: '/todo/newtodo', name: 'TodoNew', component: TodoEdit }
 ]
 
 const router = createRouter({

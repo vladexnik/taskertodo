@@ -15,19 +15,13 @@ onBeforeMount(() => {
     if (!user) {
       router.replace('/login')
     } else if (route.path == '/login' || route.path == '/signup') {
-      router.replace('/todos')
+      router.replace('/')
     }
   })
 })
 </script>
 
 <template>
-  <!-- <ul>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/about">About</router-link>
-      <router-link to="/todos">ToDos</router-link>
-    </ul> -->
-
   <main>
     <router-view />
   </main>
