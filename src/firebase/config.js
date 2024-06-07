@@ -1,18 +1,17 @@
 import * as firebase from 'firebase/app'
 import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAUhcb7mv3FdTY95dKLpwca_aY71_VK4WM',
-  authDomain: 'taskervue.firebaseapp.com',
-  projectId: 'taskervue',
-  storageBucket: 'taskervue.appspot.com',
-  messagingSenderId: '739724837895',
-  appId: '1:739724837895:web:ca3bc156690626e68216a2'
+  apiKey: import.meta.env.VITE_APIKEY,
+  authDomain: import.meta.env.VITE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_PROJECTID,
+  storageBucket: import.meta.env.VITE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_APPID
 }
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig)
-
+const app = firebase.initializeApp(firebaseConfig)
 const auth = getAuth()
-
-export { auth }
+const db = getFirestore(app)
+export { auth, db }

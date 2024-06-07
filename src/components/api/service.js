@@ -1,4 +1,4 @@
-import { db } from '@/main'
+import { db } from '@/firebase/config'
 import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore'
 
 function dateInit(timestamp) {

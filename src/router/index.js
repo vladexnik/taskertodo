@@ -10,7 +10,7 @@ const routes = [
   { path: '/signup', name: 'SignUp', component: SignUp },
   { path: '/', name: 'ToDos', component: ToDos },
   { path: '/todo/:id', name: 'ToDoDetails', component: ToDoDetails },
-  { path: '/todo/newtodo', name: 'TodoNew', component: TodoAdd }
+  { path: '/todo/newtodo', name: 'TodoAdd', component: TodoAdd }
 ]
 
 const router = createRouter({
