@@ -1,26 +1,47 @@
 <script setup>
+import { computed } from 'vue'
+import { deleteTask, updateStatus, getAllTasks } from '../api/service'
+import store from '../store'
+// import { useRouter } from 'vue-router'
+
 const props = defineProps({
-  todo: Object
+  task: Object
 })
+
 const model = defineModel()
+const userId = computed(() => store.state?.user?.uid)
+// const router = useRouter()
 
-// const emit = defineEmits(['complete'])
-// const updateChecked = (id, checked) => {
-//   emit('update:checked', id, checked)
-// }
+async function changeLocalStatus(task, userId, model) {
+  await updateStatus(task, userId, model)
+}
 
-console.log(props, 'props')
+async function deleteTaskConfirm(task, id) {
+  console.log(task, 'w', id)
+  await deleteTask(task, id)
+  await getAllTasks(id)
+}
 </script>
 
 <template>
   <li class="main__task-item">
     <div class="round">
-      <input type="checkbox" :id="props.todo.id" :value="props.todo.checked" v-model="model" />
-      <label :for="props.todo.id"></label>
+      <input
+        type="checkbox"
+        :id="task.id"
+        :value="task.checked"
+        v-model="model"
+        @change="changeLocalStatus(task, userId, model)"
+      />
+      <label :for="task.id"></label>
     </div>
-    <div @click="$router.push(`/todo/${props.todo.id}`)" class="route">
-      <span class="title">{{ props.todo.title }}</span>
-    </div>
+    <router-link :to="`/todo/${props.task.id}`">
+      <span class="title">{{ task.title }}</span>
+    </router-link>
+    <!-- <div @click="$router.push(`/todo/${props.task.id}`)" class="route">
+      <span class="title">{{ task.title }}</span>
+    </div> -->
+    <button type="button" @click="deleteTaskConfirm(task, userId)">delete</button>
   </li>
 </template>
 

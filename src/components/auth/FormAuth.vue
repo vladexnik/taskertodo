@@ -67,7 +67,14 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
           <label></label>
         </div>
         <div class="field">
-          <input type="password" placeholder="Password" v-model="password" required />
+          <input
+            type="password"
+            name="password"
+            autocomplete="on"
+            placeholder="Password"
+            v-model="password"
+            required
+          />
         </div>
         <p class="message" v-if="errMsg">{{ errMsg }}</p>
 

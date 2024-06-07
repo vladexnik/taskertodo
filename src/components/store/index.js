@@ -15,29 +15,16 @@ const store = createStore({
   mutations: {
     setUser(state, payload) {
       state.user = payload
-      console.log('user state change', state.user?.email)
+      // console.log('user state change', state.user?.email)
     },
     setAuthIsReady(state, payload) {
       state.authIsReady = payload
     }
   },
 
-  // const SignUp = () => {
-  // const auth = getAuth()
-  // createUserWithEmailAndPassword(auth, email.value, password.value)
-  //   .then((userCredential) => {
-  //     const user = userCredential.user
-  //     store.dispatch('signup', { email: email.value, password: password.value })
-  //     console.log(user)
-  //   })
-  //   .catch((error) => {
-  //     showErrorMessageSignIn(error, errMsg)
-  //   })
-  // }
   actions: {
     async signup(context, { email, password }) {
       console.log('signup action')
-
       // async code
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
@@ -48,8 +35,6 @@ const store = createStore({
     },
 
     async login(context, { email, password }) {
-      console.log('login action')
-
       const response = await signInWithEmailAndPassword(auth, email, password)
       if (response) {
         context.commit('setUser', response.user)
@@ -65,6 +50,18 @@ const store = createStore({
   }
 })
 
+// const SignUp = () => {
+// const auth = getAuth()
+// createUserWithEmailAndPassword(auth, email.value, password.value)
+//   .then((userCredential) => {
+//     const user = userCredential.user
+//     store.dispatch('signup', { email: email.value, password: password.value })
+//     console.log(user)
+//   })
+//   .catch((error) => {
+//     showErrorMessageSignIn(error, errMsg)
+//   })
+// }
 const unsub = onAuthStateChanged(auth, (user) => {
   store.commit('setAuthIsReady', true)
   store.commit('setUser', user)

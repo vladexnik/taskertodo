@@ -5,6 +5,7 @@ import router from './router'
 import store from './components/store'
 import * as firebase from 'firebase/app'
 import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAUhcb7mv3FdTY95dKLpwca_aY71_VK4WM',
@@ -16,10 +17,11 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig)
-
+// firebase.initializeApp(firebaseConfig)
+const app = firebase.initializeApp(firebaseConfig)
 const auth = getAuth()
+const db = getFirestore(app)
 
-export { auth }
+export { auth, db }
 
 createApp(App).use(router).use(store).mount('#app')
