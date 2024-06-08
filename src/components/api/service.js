@@ -21,19 +21,23 @@ export const getAllTasks = async (userId) => {
 }
 
 export const getTaskById = async (taskId, userId) => {
-  const docRef = doc(db, 'users', userId, 'todos', taskId)
-  const docSnap = await getDoc(docRef)
-  if (docSnap.exists()) {
-    let task = {
-      id: taskId,
-      title: docSnap.data().title,
-      description: docSnap.data().description,
-      checked: docSnap.data().checked,
-      date: dateInit(docSnap.data().date)
+  try {
+    const taskRef = doc(db, 'users', userId, 'todos', taskId)
+    const taskSnap = await getDoc(taskRef)
+    if (taskSnap.exists()) {
+      let task = {
+        id: taskSnap.id,
+        title: taskSnap.data().title,
+        description: taskSnap.data().description,
+        checked: taskSnap.data().checked,
+        date: dateInit(taskSnap.data().date)
+      }
+      // console.log(task)
+      return task
     }
-    console.log(task)
-    return task
-  } else return 'No this task.'
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export const addNewTask = async (task, id) => {
@@ -41,8 +45,8 @@ export const addNewTask = async (task, id) => {
   await addDoc(collection(db, 'users', id, 'todos'), task)
 }
 
-export const deleteTask = async (task, id) => {
-  await deleteDoc(doc(db, 'users', id, 'todos', task.id))
+export const deleteTask = async (taskId, userId) => {
+  await deleteDoc(doc(db, 'users', userId, 'todos', taskId))
 }
 
 export const updateTask = async (task, userId) => {
@@ -50,8 +54,8 @@ export const updateTask = async (task, userId) => {
 
   await updateDoc(updatedTask, {
     title: task.title,
-    description: task.description,
-    date: new Date(task.date)
+    description: task.description
+    // date: new Date(task.date)
   })
 }
 

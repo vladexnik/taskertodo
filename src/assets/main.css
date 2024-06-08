@@ -28,7 +28,9 @@ li {
 
 input,
 textarea {
+  font-family: 'Poppins', sans-serif;
   outline: none;
+  font-size: 14px;
 }
 
 textarea {

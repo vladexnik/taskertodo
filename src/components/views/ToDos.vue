@@ -1,6 +1,6 @@
 <script setup>
 import ToDoItem from './ToDoItem.vue'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { getAllTasks } from '../api/service'
 
@@ -8,57 +8,22 @@ import { getAllTasks } from '../api/service'
 // console.log(store.state.user)
 
 const store = useStore()
-const user = computed(() => store.state.user ?? null)
-const userId = computed(() => store.state?.user?.uid ?? null)
+const user = computed(() => store.state.user)
+const userId = computed(() => store.state.user?.uid)
 const authIsReady = computed(() => store.state.authIsReady)
 
-let data = ref([
-  // { id: 0, title: 'find bird', description: 'Fly away w d dith bird', checked: true },
-  // { id: 1, title: 'take ddf bird', description: 'Fly a df dfway with bird', checked: true },
-  // { id: 2, title: 'find flight', description: 'Fly awdf f day with bird', checked: false },
-  // {
-  //   id: 4,
-  //   title: 'dfdfdffin plane go away i am yor blood',
-  //   description: 'Fly df df rwfffffd wregyjill[p.p daway rd',
-  //   checked: true
-  // },
-  // {
-  //   id: 5,
-  //   title: 'dfdfdfdfdffind dflmd fm fmfm fkfkd l',
-  //   description: 'kilian heay d fdfd  f fd df dfdsferiuhieruqpwel [dfs ofker pk',
-  //   checked: false
-  // },
-  // { id: 6, title: 'fd df df fd find bird', description: 'Fly away w d dith bird', checked: false },
-  // {
-  //   id: 7,
-  //   title: ' jljljk htake ddf bird',
-  //   description: 'Fly a df dfway with bird',
-  //   checked: false
-  // },
-  // {
-  //   id: 88,
-  //   title: 'bnbnmbvc find flight',
-  //   description: 'Fly awdf f day with bird',
-  //   checked: false
-  // },
-  // {
-  //   id: 33,
-  //   title: 'fgt dfin plane go away i am yor blood',
-  //   description: 'g hg Fly df df rwfffffd wregyjill[p.p daway rd',
-  //   checked: true
-  // }
-])
+let data = ref(null)
 
-onMounted(() => {
-  showAllTasks()
+watchEffect(() => {
+  if (authIsReady.value) {
+    showAllTasks()
+    console.log(userId.value, 'userid mainpage')
+  }
 })
-
-// onUpdated(() => {
-//   showAllTasks()
-// })
 
 async function showAllTasks() {
   data.value = await getAllTasks(userId.value)
+  console.log(data.value)
 }
 
 const updateChecked = (task, checked) => {
@@ -85,17 +50,18 @@ const Logout = () => {
   <div class="container">
     <template v-if="authIsReady">
       <header class="header">
-        <h2 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}</h2>
+        <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}</h3>
         <button class="logout" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
       </header>
       <!-- <div>points : {{ points }}</div>
     <button @click="updatePoints(3)">larger</button> -->
 
-      <section v-if="data.length !== null" class="main">
+      <section v-if="data" class="main">
         <p class="main__tasker-count">{{ data.length }} Tasks Today</p>
         <ToDoItem
           v-for="task in data"
           :task="task"
+          :title="task.title"
           :key="task.id"
           v-model="task.checked"
           @complete="completeTask(task)"

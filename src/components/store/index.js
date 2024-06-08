@@ -15,7 +15,7 @@ const store = createStore({
   mutations: {
     setUser(state, payload) {
       state.user = payload
-      // console.log('user state change', state.user?.email)
+      console.log('user state change', state.user?.email)
     },
     setAuthIsReady(state, payload) {
       state.authIsReady = payload

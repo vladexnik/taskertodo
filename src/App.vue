@@ -1,7 +1,6 @@
 <script setup>
 import { onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-// import firebase from 'firebase/compat/app'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 const router = useRouter()

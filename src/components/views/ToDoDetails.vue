@@ -1,37 +1,54 @@
 <script setup>
-// import ToDoItem from './ToDoItem.vue'
-import { ref } from 'vue'
-// import { useRoute } from 'vue-router'
-// import { getTaskById } from '../api/service'
-// import { useStore } from 'vuex'
-// const task = ref({})
-const task1 = {
-  title: '',
-  description: ''
-}
-// const store = useStore()
+import ToDoItem from './ToDoItem.vue'
+import { computed, ref, watch, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { getTaskById, updateTask, deleteTask } from '../api/service'
 
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
 const disableUpdFlag = ref(true)
-// const route = useRoute()
-// const userId = computed(() => store.state?.user?.uid)
+const userId = computed(() => store.state.user?.uid)
+const taskId = ref(route.params.id)
 
-// onMounted(async () => {
-//   const taskId = route.params.id
-//   console.log(taskId, 'paramsId upd')
-//   task.value = await getTaskById(taskId, userId)
-//   console.log('task in edit', task.value)
-// })
+// let onetask = ref({})
+let onetask = ref(null)
 
-function changeFlag() {
-  disableUpdFlag.value = !disableUpdFlag.value
+function changeFlag(bool) {
+  disableUpdFlag.value = bool
+  console.log(disableUpdFlag.value)
 }
 
-// const props = defineProps({
-//   task: Object
-// })
+async function getSingleTask(taskId, userId) {
+  onetask.value = await getTaskById(taskId, userId)
+  return onetask.value
+}
 
-// onMounted(() => {
-//   console.log(props.task)
+async function handleDeleteTask(taskId, userId) {
+  console.log(taskId, userId, 'upd')
+  await deleteTask(taskId, userId)
+  router.push('/')
+}
+
+async function handleUpdateTask(task, userId) {
+  console.log(task, userId)
+  onetask.value = await updateTask(task, userId)
+  await getSingleTask(taskId.value, userId)
+  changeFlag(1)
+}
+
+watch(() => {
+  console.log()
+})
+
+watchEffect(async () => {
+  console.log(userId.value, taskId.value)
+  onetask.value = await getSingleTask(taskId.value, userId.value)
+})
+
+// watchEffect(() => {
+//   console.log(onetask.value)
 // })
 </script>
 
@@ -55,13 +72,14 @@ function changeFlag() {
       </svg>
       Today's tasks
     </button>
-    <form @submit.prevent="" class="form-item">
+    <form @submit.prevent="" class="form-item" v-if="onetask">
+      <ToDoItem :task="onetask" :title="onetask.title" v-model="onetask.checked" />
       <label class="form-item__label">
         Task Title:
         <input
           type="text"
           name="title"
-          :v-model="task1.title"
+          v-model="onetask.title"
           class="form-item__input-title form-item__input"
           :disabled="disableUpdFlag"
         />
@@ -72,7 +90,7 @@ function changeFlag() {
         <textarea
           type="text"
           name="description"
-          :v-model="task1.description"
+          v-model="onetask.description"
           class="form-item__input-description form-item__input"
           rows="20"
           columns="20"
@@ -80,7 +98,7 @@ function changeFlag() {
         />
       </label>
       <div class="buttons">
-        <button type="button" class="buttons__btn delete">
+        <button type="button" @click="handleDeleteTask(taskId, userId)" class="buttons__btn delete">
           <svg
             class="w-6 h-6 text-gray-800 dark:text-white"
             aria-hidden="true"
@@ -97,7 +115,12 @@ function changeFlag() {
             />
           </svg>
         </button>
-        <button @click="changeFlag()" type="button" class="buttons__btn update">
+        <button
+          @click="changeFlag(0)"
+          type="button"
+          class="buttons__btn update"
+          :disabled="!disableUpdFlag"
+        >
           <svg
             class="w-6 h-6 text-gray-800 dark:text-white"
             aria-hidden="true"
@@ -117,7 +140,12 @@ function changeFlag() {
           </svg>
         </button>
 
-        <button type="submit" class="buttons__btn done">
+        <button
+          type="submit"
+          @click.prevent="handleUpdateTask(onetask, userId)"
+          class="buttons__btn done"
+          :disabled="disableUpdFlag"
+        >
           <svg
             class="w-6 h-6 text-gray-800 dark:text-white"
             aria-hidden="true"
@@ -137,7 +165,7 @@ function changeFlag() {
       </div>
       <!-- <p class="message" v-if="hasError">{{ errorMessage }}</p> -->
     </form>
-
+    <div v-else>Loading...</div>
     <div class="buttons"></div>
   </div>
 </template>
@@ -179,7 +207,9 @@ function changeFlag() {
   background-color: #ff9d00;
   border: #ff9d00;
 }
-
+.buttons__btn:disabled {
+  background-color: #9b9797;
+}
 .back {
   height: 25px;
   border: none;

@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { deleteTask, updateStatus, getAllTasks } from '../api/service'
+import { updateStatus } from '../api/service'
 import store from '../store'
 // import { useRouter } from 'vue-router'
 
@@ -16,11 +16,11 @@ async function changeLocalStatus(task, userId, model) {
   await updateStatus(task, userId, model)
 }
 
-async function deleteTaskConfirm(task, id) {
-  console.log(task, 'w', id)
-  await deleteTask(task, id)
-  await getAllTasks(id)
-}
+// async function deleteTaskConfirm(task, id) {
+//   console.log(task, 'w', id)
+//   await deleteTask(task, id)
+//   await getAllTasks(id)
+// }
 </script>
 
 <template>
@@ -41,7 +41,7 @@ async function deleteTaskConfirm(task, id) {
     <!-- <div @click="$router.push(`/todo/${props.task.id}`)" class="route">
       <span class="title">{{ task.title }}</span>
     </div> -->
-    <button type="button" @click="deleteTaskConfirm(task, userId)">delete</button>
+    <!-- <button type="button" @click="deleteTaskConfirm(task, userId)">delete</button> -->
   </li>
 </template>
 
@@ -49,7 +49,7 @@ async function deleteTaskConfirm(task, id) {
 .main__task-item {
   display: flex;
   flex-direction: row;
-  gap: 15px;
+  gap: 20px;
 }
 
 .title {
@@ -60,7 +60,7 @@ async function deleteTaskConfirm(task, id) {
 
 .round {
   position: relative;
-  transform: translateY(5px);
+  transform: translateY(2px);
 }
 .round label {
   background-color: #fff;
