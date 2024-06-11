@@ -23,18 +23,13 @@ const addTaskConfirm = async (task, userId) => {
   if (task.title !== '' && task.description !== '') {
     await addNewTask(task, userId)
     console.log('task added confirm')
-    router.push('/')
+    alert(`Task ${task.title} is added`)
   } else {
     alert(errorMessage.value)
     hasError.value = true
     console.log(hasError.value)
   }
 }
-
-// watch(() => {
-//   console.log(task.value.title)
-//   console.log(task.value.description)
-// })
 </script>
 
 <template>

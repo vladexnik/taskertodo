@@ -1,9 +1,11 @@
 <script setup>
 import ToDoItem from './ToDoItem.vue'
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { getTaskById, updateTask, deleteTask } from '../api/service'
+import Loader from '../loader/Loader.vue'
+import { useLoader } from '../composables/useLoader'
 
 const store = useStore()
 const route = useRoute()
@@ -11,13 +13,13 @@ const router = useRouter()
 const disableUpdFlag = ref(true)
 const userId = computed(() => store.state.user?.uid)
 const taskId = ref(route.params.id)
+const { isLoading, showLoader, hideLoader } = useLoader()
 
 // let onetask = ref({})
 let onetask = ref(null)
 
 function changeFlag(bool) {
   disableUpdFlag.value = bool
-  console.log(disableUpdFlag.value)
 }
 
 async function getSingleTask(taskId, userId) {
@@ -26,30 +28,23 @@ async function getSingleTask(taskId, userId) {
 }
 
 async function handleDeleteTask(taskId, userId) {
-  console.log(taskId, userId, 'upd')
   await deleteTask(taskId, userId)
   router.push('/')
 }
 
 async function handleUpdateTask(task, userId) {
-  console.log(task, userId)
+  showLoader()
   onetask.value = await updateTask(task, userId)
   await getSingleTask(taskId.value, userId)
   changeFlag(1)
+  hideLoader()
 }
 
-watch(() => {
-  console.log()
-})
-
 watchEffect(async () => {
-  console.log(userId.value, taskId.value)
+  showLoader()
   onetask.value = await getSingleTask(taskId.value, userId.value)
+  hideLoader()
 })
-
-// watchEffect(() => {
-//   console.log(onetask.value)
-// })
 </script>
 
 <template>
@@ -165,7 +160,9 @@ watchEffect(async () => {
       </div>
       <!-- <p class="message" v-if="hasError">{{ errorMessage }}</p> -->
     </form>
-    <div v-else>Loading...</div>
+    <div v-else>
+      <Loader :isLoading="isLoading" />
+    </div>
     <div class="buttons"></div>
   </div>
 </template>
@@ -184,7 +181,7 @@ watchEffect(async () => {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 20px;
-  border: 2px solid black;
+  border: 1px solid black;
 }
 
 .form-item__input:disabled {

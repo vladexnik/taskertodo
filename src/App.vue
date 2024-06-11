@@ -19,9 +19,15 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <main>
+  <main class="main">
     <router-view />
   </main>
 </template>
 
-<style></style>
+<style>
+.main {
+  max-width: 782px;
+  height: 90vh;
+  margin: 0 auto;
+}
+</style>

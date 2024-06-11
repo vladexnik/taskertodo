@@ -2,25 +2,17 @@
 import { computed } from 'vue'
 import { updateStatus } from '../api/service'
 import store from '../store'
-// import { useRouter } from 'vue-router'
 
-const props = defineProps({
+defineProps({
   task: Object
 })
 
 const model = defineModel()
 const userId = computed(() => store.state?.user?.uid)
-// const router = useRouter()
 
 async function changeLocalStatus(task, userId, model) {
   await updateStatus(task, userId, model)
 }
-
-// async function deleteTaskConfirm(task, id) {
-//   console.log(task, 'w', id)
-//   await deleteTask(task, id)
-//   await getAllTasks(id)
-// }
 </script>
 
 <template>
@@ -35,7 +27,7 @@ async function changeLocalStatus(task, userId, model) {
       />
       <label :for="task.id"></label>
     </div>
-    <router-link :to="`/todo/${props.task.id}`">
+    <router-link :to="`/todo/${task.id}`">
       <span class="title">{{ task.title }}</span>
     </router-link>
     <!-- <div @click="$router.push(`/todo/${props.task.id}`)" class="route">

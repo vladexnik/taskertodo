@@ -25,6 +25,7 @@ const handleSubmitLogin = async () => {
     await store.dispatch('login', { email: email.value, password: password.value })
     router.push('/')
   } catch (error) {
+    setInterval
     showErrorMessageSignIn(error, errMsg)
   }
 }
@@ -58,37 +59,34 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
 </script>
 
 <template>
-  <Suspense>
-    <div class="wrapper">
-      <div class="title">{{ title }}</div>
-      <form @submit.prevent="formAction">
-        <div class="field">
-          <input type="text" placeholder="Email Address" v-model="email" required />
-          <label></label>
-        </div>
-        <div class="field">
-          <input
-            type="password"
-            name="password"
-            autocomplete="on"
-            placeholder="Password"
-            v-model="password"
-            required
-          />
-        </div>
-        <p class="message" v-if="errMsg">{{ errMsg }}</p>
+  <div class="wrapper">
+    <div class="title">{{ title }}</div>
+    <form @submit.prevent="formAction">
+      <div class="field">
+        <input type="text" placeholder="Email Address" v-model="email" required />
+        <label></label>
+      </div>
+      <div class="field">
+        <input
+          type="password"
+          name="password"
+          autocomplete="on"
+          placeholder="Password"
+          v-model="password"
+          required
+        />
+      </div>
+      <p class="message" v-if="errMsg">{{ errMsg }}</p>
 
-        <div class="field btn">
-          <input type="submit" :value="btn" />
-        </div>
-        <div class="signup-link">
-          {{ text }}
-          <router-link :to="link">{{ action }} now</router-link>
-        </div>
-      </form>
-    </div>
-    <template #fallback> Загрузка... </template>
-  </Suspense>
+      <div class="field btn">
+        <input type="submit" :value="btn" />
+      </div>
+      <div class="signup-link">
+        {{ text }}
+        <router-link :to="link">{{ action }} now</router-link>
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped>
@@ -101,7 +99,6 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
 
 .wrapper {
   margin: 0 auto;
-  margin-top: 100px;
   width: 380px;
   background: #fff;
   border-radius: 15px;

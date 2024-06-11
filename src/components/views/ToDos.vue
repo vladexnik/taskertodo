@@ -1,8 +1,11 @@
 <script setup>
 import ToDoItem from './ToDoItem.vue'
+import Loader from '../loader/Loader.vue'
+import Calendar from './Calendar/Calendar.vue'
 import { ref, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { getAllTasks } from '../api/service'
+import { useLoader } from '../composables/useLoader'
 
 // store.commit('setUser', 'vlad')
 // console.log(store.state.user)
@@ -11,19 +14,20 @@ const store = useStore()
 const user = computed(() => store.state.user)
 const userId = computed(() => store.state.user?.uid)
 const authIsReady = computed(() => store.state.authIsReady)
-
 let data = ref(null)
+const { isLoading, showLoader, hideLoader } = useLoader()
 
-watchEffect(() => {
+watchEffect(async () => {
   if (authIsReady.value) {
-    showAllTasks()
-    console.log(userId.value, 'userid mainpage')
+    await showAllTasks()
+    // console.log(userId.value, 'userid mainpage')
   }
 })
 
 async function showAllTasks() {
+  showLoader()
   data.value = await getAllTasks(userId.value)
-  console.log(data.value)
+  hideLoader()
 }
 
 const updateChecked = (task, checked) => {
@@ -47,17 +51,17 @@ const Logout = () => {
 </script>
 
 <template>
-  <div class="container">
-    <template v-if="authIsReady">
+  <template v-if="authIsReady">
+    <div class="container">
       <header class="header">
         <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}</h3>
-        <button class="logout" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
+        <button class="header__logout" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
       </header>
       <!-- <div>points : {{ points }}</div>
     <button @click="updatePoints(3)">larger</button> -->
-
-      <section v-if="data" class="main">
-        <p class="main__tasker-count">{{ data.length }} Tasks Today</p>
+      <section v-if="data" class="todos">
+        <Calendar />
+        <p class="todos__tasker-count">{{ data.length || 'No' }} Tasks Today</p>
         <ToDoItem
           v-for="task in data"
           :task="task"
@@ -67,16 +71,47 @@ const Logout = () => {
           @complete="completeTask(task)"
           @update:checked="updateChecked(task, task.checked)"
         />
+        <button
+          type="button"
+          id="show-modal"
+          @click="$router.push('/todo/newtodo')"
+          class="btn-add"
+        >
+          Add a New Task
+        </button>
       </section>
-      <div v-else>Loading...</div>
-      <button type="button" id="show-modal" @click="$router.push('/todo/newtodo')" class="btn-add">
-        Add a New Task
-      </button>
-    </template>
-  </div>
+      <div v-else>
+        <Loader :isLoading="isLoading" />
+      </div>
+    </div>
+  </template>
 </template>
 
 <style scoped>
+.container {
+  margin: 20px 20px;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 30px;
+  align-items: center;
+}
+.header__logout {
+  height: 100%;
+  padding: 8px 14px;
+  font-size: 18px;
+  background-color: rgb(51, 51, 51);
+  color: white;
+  border-radius: 30px;
+}
+.header__logout:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+  font-size: 18px;
+}
+
 .btn-add {
   margin-top: 20px;
   max-width: 400px;
@@ -92,52 +127,11 @@ const Logout = () => {
   transform: translateY(1px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-.notes {
-  margin-top: 100px;
-}
-.logout {
-  height: 100%;
-  padding: 8px 14px;
-  font-size: 18px;
-  background-color: rgb(51, 51, 51);
-  color: white;
-  border-radius: 30px;
-}
-.logout:hover {
-  transform: scale(1.05);
-  cursor: pointer;
-  font-size: 18px;
-}
-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 30px;
-  align-items: center;
-}
 
-.main__tasker-count {
+.todos__tasker-count {
   font-weight: 800px;
   font-size: 18px;
-  margin: 30px 0;
-}
-
-.wrapper {
-  max-width: 600px;
-}
-.form-item__label {
-  display: flex;
-  flex-direction: column;
-}
-
-input:focus {
-  border: none;
-}
-.form-item__input {
-  border: 0px;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .buttons {
