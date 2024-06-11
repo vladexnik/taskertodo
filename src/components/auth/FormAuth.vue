@@ -99,6 +99,7 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
 
 .wrapper {
   margin: 0 auto;
+  margin-top: 100px;
   width: 380px;
   background: #fff;
   border-radius: 15px;

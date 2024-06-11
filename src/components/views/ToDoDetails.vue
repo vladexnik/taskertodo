@@ -13,10 +13,8 @@ const router = useRouter()
 const disableUpdFlag = ref(true)
 const userId = computed(() => store.state.user?.uid)
 const taskId = ref(route.params.id)
-const { isLoading, showLoader, hideLoader } = useLoader()
-
-// let onetask = ref({})
 let onetask = ref(null)
+const { isLoading, showLoader, hideLoader } = useLoader()
 
 function changeFlag(bool) {
   disableUpdFlag.value = bool
@@ -79,7 +77,6 @@ watchEffect(async () => {
           :disabled="disableUpdFlag"
         />
       </label>
-      <!-- <ToDoItem /> -->
       <label class="form-item__label">
         Description Title:
         <textarea

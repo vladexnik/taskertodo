@@ -4,8 +4,9 @@
       v-for="day in days"
       :day="day"
       :key="day"
+      :data="data"
       :isActive="activeDay === day.date"
-      @setActiveDay="SetActiveDay(day.date)"
+      @SetActiveDay="SetActiveDay(day.date)"
     />
   </ul>
 </template>
@@ -14,27 +15,32 @@
 import Day from './Day/Day.vue'
 import { ref, computed } from 'vue'
 import dayjs from 'dayjs'
+import { useStore } from 'vuex'
 
+defineProps({
+  data: Array
+})
+
+const store = useStore()
 const today = ref(dayjs())
-console.log(today.value, 'first')
 const days = computed(() => {
   const result = []
   for (let i = 0; i < 30; i++) {
     result.push({
-      date: today.value.add(i, 'day').toDate(),
+      date: today.value.add(i, 'day').format('YYYY-MM-DD'),
       dayOfWeek: today.value.add(i, 'day').format('ddd'),
       dayOfMonth: today.value.add(i, 'day').format('D')
     })
-    console.log(today.value, 'circle', i)
   }
-  console.log(result)
   return result
 })
+
 const activeDay = ref(null)
 
 const SetActiveDay = (date) => {
   activeDay.value = date
-  console.log(activeDay.value)
+  store.commit('setActiveDay', activeDay.value)
+  console.log(date)
 }
 </script>
 <style scoped>

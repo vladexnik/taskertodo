@@ -6,11 +6,13 @@ import {
   signOut,
   onAuthStateChanged
 } from 'firebase/auth'
+import dayjs from 'dayjs'
 
 const store = createStore({
   state: {
     user: null,
-    authIsReady: false
+    authIsReady: false,
+    activeDay: dayjs().format('YYYY-MM-DD')
   },
   mutations: {
     setUser(state, payload) {
@@ -19,6 +21,9 @@ const store = createStore({
     },
     setAuthIsReady(state, payload) {
       state.authIsReady = payload
+    },
+    setActiveDay(state, activeDay) {
+      state.activeDay = activeDay
     }
   },
 

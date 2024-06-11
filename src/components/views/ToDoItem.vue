@@ -30,10 +30,6 @@ async function changeLocalStatus(task, userId, model) {
     <router-link :to="`/todo/${task.id}`">
       <span class="title">{{ task.title }}</span>
     </router-link>
-    <!-- <div @click="$router.push(`/todo/${props.task.id}`)" class="route">
-      <span class="title">{{ task.title }}</span>
-    </div> -->
-    <!-- <button type="button" @click="deleteTaskConfirm(task, userId)">delete</button> -->
   </li>
 </template>
 

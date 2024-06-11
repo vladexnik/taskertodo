@@ -9,11 +9,12 @@ let route = useRoute()
 const readonlybool = ref(route.path === '/todo/newtodo' ? false : true)
 const errorMessage = ref('Input fields to validate task')
 const userId = computed(() => store.state?.user?.uid)
+const activeDay = computed(() => store.state?.activeDay)
 
 const task = ref({
   title: '',
   description: '',
-  date: new Date().toISOString().split('T')[0],
+  date: activeDay.value,
   checked: false
 })
 
@@ -22,7 +23,7 @@ const addTaskConfirm = async (task, userId) => {
   let hasError = ref(false)
   if (task.title !== '' && task.description !== '') {
     await addNewTask(task, userId)
-    console.log('task added confirm')
+    console.log('task added confirm', task.date)
     alert(`Task ${task.title} is added`)
   } else {
     alert(errorMessage.value)

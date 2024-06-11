@@ -3,7 +3,7 @@ import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, updateDoc } from '
 
 function dateInit(timestamp) {
   // console.log(timestamp.toDate().toISOString().split('T')[0].split('-').reverse().join('.'))
-  return timestamp.toDate().toISOString().split('T')[0].split('-').reverse().join('.')
+  return timestamp.toDate().toISOString().split('T')[0].split('-').join('-')
 }
 
 export const getAllTasks = async (userId) => {
@@ -20,6 +20,7 @@ export const getAllTasks = async (userId) => {
           date: dateInit(doc.data().date)
         })
       })
+      console.log(tasks)
       return tasks
     }
   } catch (e) {
@@ -37,9 +38,9 @@ export const getTaskById = async (taskId, userId) => {
         title: taskSnap.data().title,
         description: taskSnap.data().description,
         checked: taskSnap.data().checked,
-        date: dateInit(taskSnap.data().date)
+        date: taskSnap.data().date
       }
-      // console.log(task)
+      console.log(task)
       return task
     }
   } catch (e) {
@@ -49,6 +50,7 @@ export const getTaskById = async (taskId, userId) => {
 
 export const addNewTask = async (task, id) => {
   task.date = new Date(task.date)
+  console.log(task.date)
   await addDoc(collection(db, 'users', id, 'todos'), task)
 }
 

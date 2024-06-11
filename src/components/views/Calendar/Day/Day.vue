@@ -1,11 +1,25 @@
 <script setup>
+import { computed, watchEffect } from 'vue'
 import IconOrangeCircle from '../../../icons/IconOrangeCircle.vue'
 import IconRedCircle from '../../../icons/IconRedCircle.vue'
 
-defineProps({
+const props = defineProps({
   day: Object,
+  data: Array,
   isActive: Boolean
 })
+
+let tasksForDay = props.data.filter((task) => task.date === props.day.date)
+const checkedTasks = computed(() => {
+  return tasksForDay.some((task) => task.checked)
+})
+const uncheckedTasks = computed(() => {
+  return tasksForDay.some((task) => !task.checked)
+})
+
+watchEffect(() => {
+  console.log(props.day, props.data, tasksForDay, checkedTasks.value, uncheckedTasks.value)
+}, [tasksForDay])
 </script>
 
 <template>
@@ -15,8 +29,8 @@ defineProps({
       <p class="container__number">{{ day.dayOfMonth }}</p>
     </button>
     <div class="tasks-status">
-      <icon-red-circle />
-      <icon-orange-circle />
+      <icon-orange-circle class="tasks-status__none" :class="{ show: checkedTasks }" />
+      <icon-red-circle class="tasks-status__none" :class="{ show: uncheckedTasks }" />
     </div>
   </li>
 </template>
@@ -27,7 +41,12 @@ defineProps({
   font-size: 12px;
   font-weight: 800;
 }
-
+.tasks-status__none {
+  display: none;
+}
+.show {
+  display: block;
+}
 .container {
   width: 50px;
   display: flex;

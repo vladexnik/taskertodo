@@ -6,6 +6,7 @@ import { ref, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { getAllTasks } from '../api/service'
 import { useLoader } from '../composables/useLoader'
+import dayjs from 'dayjs'
 
 // store.commit('setUser', 'vlad')
 // console.log(store.state.user)
@@ -14,20 +15,31 @@ const store = useStore()
 const user = computed(() => store.state.user)
 const userId = computed(() => store.state.user?.uid)
 const authIsReady = computed(() => store.state.authIsReady)
+const activeDay = computed(() => store.state?.activeDay)
 let data = ref(null)
+let currentDateTasks = ref(null)
 const { isLoading, showLoader, hideLoader } = useLoader()
 
 watchEffect(async () => {
   if (authIsReady.value) {
     await showAllTasks()
-    // console.log(userId.value, 'userid mainpage')
   }
 })
+
+watchEffect(() => {
+  showCurrentDateTasks()
+  // console.log(checkedTasks.value, ' dd', uncheckedTasks.value)
+}, [activeDay])
 
 async function showAllTasks() {
   showLoader()
   data.value = await getAllTasks(userId.value)
   hideLoader()
+}
+
+function showCurrentDateTasks() {
+  currentDateTasks.value = data.value?.filter((task) => task.date === activeDay.value)
+  console.log(currentDateTasks.value, activeDay.value)
 }
 
 const updateChecked = (task, checked) => {
@@ -40,6 +52,7 @@ const completeTask = (task) => {
 
 const Logout = () => {
   store.dispatch('logout')
+  store.commit('setActiveDay', dayjs().format('YYYY-MM-DD'))
 }
 
 // const points = computed(() => {
@@ -59,11 +72,11 @@ const Logout = () => {
       </header>
       <!-- <div>points : {{ points }}</div>
     <button @click="updatePoints(3)">larger</button> -->
-      <section v-if="data" class="todos">
-        <Calendar />
-        <p class="todos__tasker-count">{{ data.length || 'No' }} Tasks Today</p>
+      <section v-if="currentDateTasks" class="todos">
+        <Calendar :data="data" />
+        <p class="todos__tasker-count">{{ currentDateTasks?.length || 'No' }} Tasks For Day</p>
         <ToDoItem
-          v-for="task in data"
+          v-for="task in currentDateTasks"
           :task="task"
           :title="task.title"
           :key="task.id"
