@@ -2,7 +2,6 @@ import { db } from '@/firebase/config'
 import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, updateDoc } from 'firebase/firestore'
 
 function dateInit(timestamp) {
-  // console.log(timestamp.toDate().toISOString().split('T')[0].split('-').reverse().join('.'))
   return timestamp.toDate().toISOString().split('T')[0].split('-').join('-')
 }
 
@@ -40,7 +39,7 @@ export const getTaskById = async (taskId, userId) => {
         checked: taskSnap.data().checked,
         date: taskSnap.data().date
       }
-      console.log(task)
+      // console.log(task)
       return task
     }
   } catch (e) {
@@ -64,7 +63,6 @@ export const updateTask = async (task, userId) => {
   await updateDoc(updatedTask, {
     title: task.title,
     description: task.description
-    // date: new Date(task.date)
   })
 }
 

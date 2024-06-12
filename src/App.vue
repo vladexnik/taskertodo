@@ -26,8 +26,7 @@ onBeforeMount(() => {
 
 <style>
 .main {
-  max-width: 782px;
-  height: 90vh;
+  max-width: 762px;
   margin: 0 auto;
 }
 </style>

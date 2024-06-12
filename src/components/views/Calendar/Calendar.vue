@@ -1,16 +1,3 @@
-<template>
-  <ul class="calendar-list">
-    <Day
-      v-for="day in days"
-      :day="day"
-      :key="day"
-      :data="data"
-      :isActive="activeDay === day.date"
-      @SetActiveDay="SetActiveDay(day.date)"
-    />
-  </ul>
-</template>
-
 <script setup>
 import Day from './Day/Day.vue'
 import { ref, computed } from 'vue'
@@ -35,14 +22,30 @@ const days = computed(() => {
   return result
 })
 
-const activeDay = ref(null)
+const activeDay = computed(() => store.state.activeDay)
 
 const SetActiveDay = (date) => {
-  activeDay.value = date
-  store.commit('setActiveDay', activeDay.value)
+  store.commit('setActiveDay', date)
   console.log(date)
 }
+
+const isActive = (date) => {
+  return activeDay.value === date
+}
 </script>
+<template>
+  <ul class="calendar-list">
+    <Day
+      v-for="day in days"
+      :day="day"
+      :key="day"
+      :data="data"
+      :isActive="isActive(day.date)"
+      @SetActiveDay="SetActiveDay(day.date)"
+    />
+  </ul>
+</template>
+
 <style scoped>
 .calendar-list {
   display: flex;
@@ -52,6 +55,15 @@ const SetActiveDay = (date) => {
   overflow: auto;
 }
 ::-webkit-scrollbar {
-  display: block;
+  width: 15px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 9em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 9em;
+  box-shadow: inset 1px 1px 10px #f3faf7;
 }
 </style>

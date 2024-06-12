@@ -6,6 +6,10 @@ import { useStore } from 'vuex'
 import { getTaskById, updateTask, deleteTask } from '../api/service'
 import Loader from '../loader/Loader.vue'
 import { useLoader } from '../composables/useLoader'
+import IconBack from '../icons/IconBack.vue'
+import IconDelete from '../icons/IconDelete.vue'
+import IconUpdate from '../icons/IconUpdate.vue'
+import IconAdd from '../icons/IconAdd.vue'
 
 const store = useStore()
 const route = useRoute()
@@ -48,21 +52,7 @@ watchEffect(async () => {
 <template>
   <div class="wrapper">
     <button @click="$router.back()" type="button" class="back">
-      <svg
-        class="w-6 h-6 text-gray-800 dark:text-white"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M13.729 5.575c1.304-1.074 3.27-.146 3.27 1.544v9.762c0 1.69-1.966 2.618-3.27 1.544l-5.927-4.881a2 2 0 0 1 0-3.088l5.927-4.88Z"
-          clip-rule="evenodd"
-        />
-      </svg>
+      <IconBack />
       Today's tasks
     </button>
     <form @submit.prevent="" class="form-item" v-if="onetask">
@@ -91,21 +81,7 @@ watchEffect(async () => {
       </label>
       <div class="buttons">
         <button type="button" @click="handleDeleteTask(taskId, userId)" class="buttons__btn delete">
-          <svg
-            class="w-6 h-6 text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-              clip-rule="evenodd"
-            />
-          </svg>
+          <IconDelete />
         </button>
         <button
           @click="changeFlag(0)"
@@ -113,23 +89,7 @@ watchEffect(async () => {
           class="buttons__btn update"
           :disabled="!disableUpdFlag"
         >
-          <svg
-            class="w-6 h-6 text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-            />
-          </svg>
+          <IconUpdate />
         </button>
 
         <button
@@ -138,24 +98,9 @@ watchEffect(async () => {
           class="buttons__btn done"
           :disabled="disableUpdFlag"
         >
-          <svg
-            class="w-6 h-6 text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
-              clip-rule="evenodd"
-            />
-          </svg>
+          <IconAdd />
         </button>
       </div>
-      <!-- <p class="message" v-if="hasError">{{ errorMessage }}</p> -->
     </form>
     <div v-else>
       <Loader :isLoading="isLoading" />

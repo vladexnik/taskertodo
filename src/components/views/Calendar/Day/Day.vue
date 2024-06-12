@@ -18,7 +18,7 @@ const uncheckedTasks = computed(() => {
 })
 
 watchEffect(() => {
-  console.log(props.day, props.data, tasksForDay, checkedTasks.value, uncheckedTasks.value)
+  //   console.log(props.day, props.data, tasksForDay, checkedTasks.value, uncheckedTasks.value)
 }, [tasksForDay])
 </script>
 
@@ -56,7 +56,7 @@ watchEffect(() => {
   gap: 5px;
   height: 60px;
   border: 2px solid rgb(82, 82, 82);
-  border-radius: 13px;
+  border-radius: 25%;
   display: flex;
   color: black;
   transition: ease 0.5s;

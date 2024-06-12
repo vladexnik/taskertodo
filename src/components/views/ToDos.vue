@@ -42,14 +42,6 @@ function showCurrentDateTasks() {
   console.log(currentDateTasks.value, activeDay.value)
 }
 
-const updateChecked = (task, checked) => {
-  task.checked = !checked
-}
-
-const completeTask = (task) => {
-  task.checked = !task.checked
-}
-
 const Logout = () => {
   store.dispatch('logout')
   store.commit('setActiveDay', dayjs().format('YYYY-MM-DD'))
@@ -67,7 +59,7 @@ const Logout = () => {
   <template v-if="authIsReady">
     <div class="container">
       <header class="header">
-        <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}</h3>
+        <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}!</h3>
         <button class="header__logout" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
       </header>
       <!-- <div>points : {{ points }}</div>
@@ -81,14 +73,12 @@ const Logout = () => {
           :title="task.title"
           :key="task.id"
           v-model="task.checked"
-          @complete="completeTask(task)"
-          @update:checked="updateChecked(task, task.checked)"
         />
         <button
           type="button"
           id="show-modal"
           @click="$router.push('/todo/newtodo')"
-          class="btn-add"
+          class="todos__btn-add"
         >
           Add a New Task
         </button>
@@ -125,7 +115,7 @@ const Logout = () => {
   font-size: 18px;
 }
 
-.btn-add {
+.todos__btn-add {
   margin-top: 20px;
   max-width: 400px;
   width: 100%;
@@ -134,8 +124,9 @@ const Logout = () => {
   border: #ff9d00;
   background-color: #ff9d00;
   color: white;
+  margin-bottom: 20px;
 }
-.btn-add:hover {
+.todos__btn-add:hover {
   cursor: pointer;
   transform: translateY(1px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -147,22 +138,6 @@ const Logout = () => {
   margin: 20px 0;
 }
 
-.buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-.buttons__btn {
-  font-size: 18px;
-  height: 40px;
-  padding: 5px;
-  width: 100px;
-  border-radius: 10px;
-  color: white;
-  background-color: #ff9d00;
-  border: #ff9d00;
-}
-
 .back {
   height: 25px;
   border: none;
@@ -172,18 +147,5 @@ const Logout = () => {
   display: flex;
   align-items: center;
   gap: 5px;
-}
-.buttons__btn:hover {
-  cursor: pointer;
-  transform: translateY(1px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.delete {
-  background-color: red;
-}
-
-.done {
-  background-color: rgb(32, 226, 106);
 }
 </style>
