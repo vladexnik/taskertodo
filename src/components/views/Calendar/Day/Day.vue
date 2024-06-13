@@ -18,7 +18,6 @@ const uncheckedTasks = computed(() => {
   return tasksForDay.some((task) => !task.checked)
 })
 </script>
-
 <template>
   <li class="wrapper-day">
     <button class="container" :class="{ active: isActive }" @click="$emit('setActiveDay')">
