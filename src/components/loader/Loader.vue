@@ -23,7 +23,7 @@ export default {
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  background: linear-gradient(0deg, rgba(240, 12, 12, 0.2) 33%, #ff3d00 100%);
+  background: linear-gradient(0deg, rgba(240, 12, 12, 0.2) 33%, var(--red-color) 100%);
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
@@ -37,7 +37,7 @@ export default {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--white-color);
 }
 @keyframes rotation {
   0% {

@@ -25,7 +25,6 @@ const handleSubmitLogin = async () => {
     await store.dispatch('login', { email: email.value, password: password.value })
     router.push('/')
   } catch (error) {
-    setInterval
     showErrorMessageSignIn(error, errMsg)
   }
 }
@@ -90,18 +89,11 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
 </template>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
 .wrapper {
   margin: 0 auto;
-  margin-top: 100px;
-  width: 380px;
-  background: #fff;
+  margin-top: 70px;
+  max-width: 380px;
+  background: var(--white-color);
   border-radius: 15px;
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
 }
@@ -110,13 +102,14 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
   font-weight: 600;
   text-align: center;
   line-height: 100px;
-  color: #fff;
+  color: white;
   user-select: none;
   border-radius: 15px 15px 0 0;
-  background: linear-gradient(-105deg, #c850c0, #394fbd);
+  background: linear-gradient(-90deg, var(--orange-color), var(--red-color));
 }
 .wrapper form {
   padding: 10px 30px 50px 30px;
+  background-color: white;
 }
 .wrapper form .field {
   height: 50px;
@@ -128,45 +121,44 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
   height: 100%;
   width: 100%;
   outline: none;
-  font-size: 17px;
-  padding-left: 20px;
-  border: 1px solid lightgrey;
+  font-size: 16px;
+  padding: 0 15px;
+  border: 1px solid var(--grey-color);
   border-radius: 25px;
   transition: all 0.3s ease;
 }
 .wrapper form .field input:focus,
 form .field input:valid {
-  border-color: #4158d0;
+  border-color: grey;
 }
 
 form .content label {
-  color: #262626;
+  color: var(--dark-color);
   user-select: none;
   padding-left: 5px;
 }
 
 form .field input[type='submit'] {
-  color: #fff;
+  color: white;
   border: none;
   padding-left: 0;
   margin-top: 10px;
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
-  background: linear-gradient(-105deg, #c850c0, #394fbd);
+  background: linear-gradient(-90deg, var(--orange-color), var(--red-color));
   transition: all 0.3s ease;
 }
 form .field input[type='submit']:active {
   transform: scale(0.95);
 }
 form .signup-link {
-  color: #262626;
   margin-top: 20px;
   text-align: center;
 }
 form .pass-link a,
 form .signup-link a {
-  color: #4158d0;
+  color: var(--orange-color);
   text-decoration: none;
 }
 form .pass-link a:hover,
@@ -178,6 +170,6 @@ form .signup-link a:hover {
   text-align: left;
   padding-left: 10px;
   font-weight: 600;
-  color: red;
+  color: var(--red-color);
 }
 </style>

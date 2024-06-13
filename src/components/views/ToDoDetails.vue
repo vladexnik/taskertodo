@@ -74,9 +74,9 @@ watchEffect(async () => {
           name="description"
           v-model="onetask.description"
           class="form-item__input-description form-item__input"
-          rows="20"
-          columns="20"
           :disabled="disableUpdFlag"
+          rows="15"
+          columns="20"
         />
       </label>
       <div class="buttons">
@@ -110,73 +110,19 @@ watchEffect(async () => {
 </template>
 
 <style scoped>
-.wrapper {
-  max-width: 600px;
-}
-.form-item__label {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-item__input {
-  border: 0px;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid black;
-}
-
 .form-item__input:disabled {
   border: none;
   color: black;
 }
-
-.buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-.buttons__btn {
-  font-size: 18px;
-  height: 40px;
-  padding: 5px;
-  width: 100px;
-  border-radius: 10px;
-  color: white;
-  background-color: #ff9d00;
-  border: #ff9d00;
-}
 .buttons__btn:disabled {
-  background-color: #9b9797;
-}
-.back {
-  height: 25px;
-  border: none;
-  background-color: transparent;
-  margin-bottom: 20px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.buttons__btn:hover {
-  cursor: pointer;
-  transform: translateY(1px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  background-color: var(--grey-color);
 }
 
 .delete {
-  background-color: red;
+  background-color: var(--red-color);
 }
 
 .done {
-  background-color: rgb(32, 226, 106);
-}
-
-.message {
-  text-align: left;
-  padding-left: 10px;
-  font-weight: 600;
-  color: red;
+  background-color: var(--green-color);
 }
 </style>

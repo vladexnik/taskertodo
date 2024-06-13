@@ -2,6 +2,7 @@
 import { onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import './assets/main.css'
 
 const router = useRouter()
 const route = useRoute()
@@ -19,14 +20,6 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <main class="main">
-    <router-view />
-  </main>
+  <router-view class="" />
 </template>
-
-<style>
-.main {
-  max-width: 762px;
-  margin: 0 auto;
-}
-</style>
+<style></style>

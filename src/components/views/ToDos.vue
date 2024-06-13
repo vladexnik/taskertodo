@@ -8,9 +8,6 @@ import { getAllTasks } from '../api/service'
 import { useLoader } from '../composables/useLoader'
 import dayjs from 'dayjs'
 
-// store.commit('setUser', 'vlad')
-// console.log(store.state.user)
-
 const store = useStore()
 const user = computed(() => store.state.user)
 const userId = computed(() => store.state.user?.uid)
@@ -26,9 +23,12 @@ watchEffect(async () => {
   }
 })
 
+function toggleTheme() {
+  document.body.classList.toggle('dark-theme')
+}
+
 watchEffect(() => {
   showCurrentDateTasks()
-  // console.log(checkedTasks.value, ' dd', uncheckedTasks.value)
 }, [activeDay])
 
 async function showAllTasks() {
@@ -39,20 +39,12 @@ async function showAllTasks() {
 
 function showCurrentDateTasks() {
   currentDateTasks.value = data.value?.filter((task) => task.date === activeDay.value)
-  console.log(currentDateTasks.value, activeDay.value)
 }
 
 const Logout = () => {
   store.dispatch('logout')
   store.commit('setActiveDay', dayjs().format('YYYY-MM-DD'))
 }
-
-// const points = computed(() => {
-//   return store.state.points
-// })
-// const updatePoints = (points) => {
-//   store.commit('updatePoints', points)
-// }
 </script>
 
 <template>
@@ -60,20 +52,21 @@ const Logout = () => {
     <div class="container">
       <header class="header">
         <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}!</h3>
+        <button class="header__logout" @click="toggleTheme">theme</button>
         <button class="header__logout" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
       </header>
-      <!-- <div>points : {{ points }}</div>
-    <button @click="updatePoints(3)">larger</button> -->
       <section v-if="currentDateTasks" class="todos">
         <Calendar :data="data" />
         <p class="todos__tasker-count">{{ currentDateTasks?.length || 'No' }} Tasks For Day</p>
-        <ToDoItem
-          v-for="task in currentDateTasks"
-          :task="task"
-          :title="task.title"
-          :key="task.id"
-          v-model="task.checked"
-        />
+        <ul class="todos__todo-items">
+          <ToDoItem
+            v-for="task in currentDateTasks"
+            :task="task"
+            :title="task.title"
+            :key="task.id"
+            v-model="task.checked"
+          />
+        </ul>
         <button
           type="button"
           id="show-modal"
@@ -91,9 +84,6 @@ const Logout = () => {
 </template>
 
 <style scoped>
-.container {
-  margin: 20px 20px;
-}
 .header {
   display: flex;
   flex-direction: row;
@@ -101,18 +91,26 @@ const Logout = () => {
   gap: 30px;
   align-items: center;
 }
+.header__title {
+  color: var(--dark-color);
+}
+
 .header__logout {
-  height: 100%;
   padding: 8px 14px;
   font-size: 18px;
-  background-color: rgb(51, 51, 51);
-  color: white;
+  background-color: var(--dark-color);
+  color: var(--white-color);
   border-radius: 30px;
 }
+
 .header__logout:hover {
   transform: scale(1.05);
   cursor: pointer;
   font-size: 18px;
+}
+
+.todos__todo-items {
+  transition: ease-in 3s;
 }
 
 .todos__btn-add {
@@ -121,31 +119,22 @@ const Logout = () => {
   width: 100%;
   height: 40px;
   border-radius: 10px;
-  border: #ff9d00;
-  background-color: #ff9d00;
-  color: white;
+  border: var(--orange-color);
+  background: linear-gradient(-140deg, var(--orange-color), var(--red-color));
+  color: var(--white-color);
   margin-bottom: 20px;
 }
+
 .todos__btn-add:hover {
   cursor: pointer;
   transform: translateY(1px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px var(--dark-btn-hover);
 }
 
 .todos__tasker-count {
+  color: var(--dark-color);
   font-weight: 800px;
   font-size: 18px;
   margin: 20px 0;
-}
-
-.back {
-  height: 25px;
-  border: none;
-  background-color: transparent;
-  margin-bottom: 20px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
 }
 </style>

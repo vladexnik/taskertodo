@@ -1,5 +1,5 @@
 <script setup>
-import { computed, watchEffect } from 'vue'
+import { computed } from 'vue'
 import IconOrangeCircle from '../../../icons/IconOrangeCircle.vue'
 import IconRedCircle from '../../../icons/IconRedCircle.vue'
 
@@ -10,20 +10,17 @@ const props = defineProps({
 })
 
 let tasksForDay = props.data.filter((task) => task.date === props.day.date)
+
 const checkedTasks = computed(() => {
   return tasksForDay.some((task) => task.checked)
 })
 const uncheckedTasks = computed(() => {
   return tasksForDay.some((task) => !task.checked)
 })
-
-watchEffect(() => {
-  //   console.log(props.day, props.data, tasksForDay, checkedTasks.value, uncheckedTasks.value)
-}, [tasksForDay])
 </script>
 
 <template>
-  <li class="wrapper">
+  <li class="wrapper-day">
     <button class="container" :class="{ active: isActive }" @click="$emit('setActiveDay')">
       <p class="container__day-week">{{ day.dayOfWeek }}</p>
       <p class="container__number">{{ day.dayOfMonth }}</p>
@@ -36,7 +33,7 @@ watchEffect(() => {
 </template>
 
 <style scoped>
-.wrapper {
+.wrapper-day {
   width: 50px;
   font-size: 12px;
   font-weight: 800;
@@ -48,36 +45,34 @@ watchEffect(() => {
   display: block;
 }
 .container {
-  width: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 5px;
   height: 60px;
-  border: 2px solid rgb(82, 82, 82);
+  width: 50px;
+  border: 2px solid var(--dark-color);
+  background-color: var(--white-color);
   border-radius: 25%;
-  display: flex;
-  color: black;
-  transition: ease 0.5s;
+  color: var(--dark-color);
+  font-weight: 600;
 }
-.container__day-week {
-  color: rgb(148, 148, 148);
-}
+
 .tasks-status {
   display: flex;
   justify-content: center;
 }
 .container:hover {
   cursor: pointer;
-  color: orange;
-  border-color: orange;
+  color: var(--orange-color);
+  border-color: var(--orange-color);
   transition: ease 0.5s;
 }
 
 .active {
-  background-color: black;
-  color: white;
-  border-color: black;
+  background-color: var(--dark-color);
+  color: var(--white-color);
+  border-color: var(--dark-color);
 }
 </style>

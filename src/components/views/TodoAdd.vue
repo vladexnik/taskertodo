@@ -21,7 +21,6 @@ const task = ref({
 let taskAdded = ref(null)
 
 const addTaskConfirm = async (task, userId) => {
-  // console.log(task, userId)
   if (task.title !== '' && task.description !== '') {
     await addNewTask(task, userId)
     showAddTaskMessage(taskAdded, true)
@@ -58,7 +57,7 @@ const addTaskConfirm = async (task, userId) => {
           name="description"
           v-model.trim="task.description"
           class="form-item__input-description form-item__input"
-          rows="20"
+          rows="15"
           columns="20"
         />
       </label>
@@ -74,74 +73,24 @@ const addTaskConfirm = async (task, userId) => {
 </template>
 
 <style scoped>
-.wrapper {
-  max-width: 600px;
-}
-
-.form-item__label {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-item__input {
-  border: 0px;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 2px solid black;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-.buttons__btn {
-  font-size: 18px;
-  height: 40px;
-  padding: 5px;
-  width: 100px;
-  border-radius: 10px;
-  color: white;
-  background-color: #ff9d00;
-  border: #ff9d00;
-}
-
-.back {
-  height: 25px;
-  border: none;
-  background-color: transparent;
-  margin-bottom: 20px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.buttons__btn:hover {
-  cursor: pointer;
-  transform: translateY(1px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.delete {
-  background-color: red;
-}
-
 .done {
-  background-color: rgb(32, 226, 106);
+  background-color: var(--green-color);
 }
+
 .message {
   margin-top: 20px;
   font-weight: bold;
   padding: 10px;
   border-radius: 5px;
-  background-color: #f0f0f0;
+  background-color: var(--grey-color);
   margin-bottom: 20px;
 }
+
 .success-message {
-  color: green;
+  color: var(--green-color);
 }
+
 .error-message {
-  color: red;
+  color: var(--red-color);
 }
 </style>

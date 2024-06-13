@@ -1,27 +1,56 @@
-@import './base.css';
-body {
-  background-color: rgb(255, 255, 255);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-element {
-  --main-color: #ff9d00;
+body {
+  background-color: var(--white-color);
+  transition: background-color 0.5s ease-in-out;
 }
+
+:root {
+  --orange-color: #ff9d00;
+  --red-color: red;
+  --white-color: white;
+  --dark-color: black;
+  --grey-color: #f1f1f1;
+  --green-color: rgb(32, 226, 106);
+  --dark-btn-hover: rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme {
+  --orange-color: #ff9d00;
+  --red-color: rgb(237, 73, 73);
+  --white-color: black;
+  --dark-color: white;
+  --grey-color: #e8e8e8;
+  --dark-btn-hover: rgba(248, 244, 244, 0.2);
+}
+
+/* body {
+  background-color: var(--white-color);
+} */
 
 #app {
-  max-width: 1280px;
+  max-width: 762px;
+  height: 100vh;
   margin: 0 auto;
   padding: 2rem;
   font-size: 18px;
+  /* color: var(--white-color); */
 }
 
 a {
   text-decoration: none;
-  color: white;
+  padding: 3px;
 }
 
 ul {
   padding: 0;
 }
+
 li {
   padding: 5px 0;
   list-style: none;
@@ -33,6 +62,10 @@ textarea {
   outline: none;
   font-size: 14px;
 }
+textarea:disabled,
+input:disabled {
+  background-color: var(--grey-color);
+}
 
 textarea {
   resize: none;
@@ -40,4 +73,67 @@ textarea {
 
 button:hover {
   cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+  height: 8px;
+  border-radius: 9em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 9em;
+  box-shadow: inset 1px 1px 10px var(--grey-color);
+}
+
+.wrapper {
+  max-width: 600px;
+}
+
+.form-item__label {
+  display: flex;
+  flex-direction: column;
+  color: var(--dark-color);
+}
+
+.form-item__input {
+  border: 0px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid var(--dark-color);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.buttons__btn {
+  font-size: 18px;
+  height: 40px;
+  padding: 5px;
+  width: 100px;
+  border-radius: 10px;
+  color: var(--white-color);
+  background-color: var(--orange-color);
+  border: var(--orange-color);
+}
+.buttons__btn:hover {
+  cursor: pointer;
+  transform: translateY(1px);
+  box-shadow: 0 10px 20px var(--dark-btn-hover);
+}
+
+.back {
+  height: 25px;
+  border: none;
+  background-color: transparent;
+  margin-bottom: 20px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--dark-color);
 }

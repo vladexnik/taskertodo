@@ -17,7 +17,6 @@ const store = createStore({
   mutations: {
     setUser(state, payload) {
       state.user = payload
-      console.log('user state change', state.user?.email)
     },
     setAuthIsReady(state, payload) {
       state.authIsReady = payload
@@ -29,7 +28,6 @@ const store = createStore({
 
   actions: {
     async signup(context, { email, password }) {
-      console.log('signup action')
       // async code
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {

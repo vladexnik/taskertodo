@@ -1,8 +1,9 @@
 <script setup>
 import Day from './Day/Day.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import dayjs from 'dayjs'
 import { useStore } from 'vuex'
+import { nextTick } from 'vue'
 
 defineProps({
   data: Array
@@ -10,9 +11,10 @@ defineProps({
 
 const store = useStore()
 const today = ref(dayjs())
+let totalDays = ref(30)
 const days = computed(() => {
   const result = []
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < totalDays.value; i++) {
     result.push({
       date: today.value.add(i, 'day').format('YYYY-MM-DD'),
       dayOfWeek: today.value.add(i, 'day').format('ddd'),
@@ -26,19 +28,46 @@ const activeDay = computed(() => store.state.activeDay)
 
 const SetActiveDay = (date) => {
   store.commit('setActiveDay', date)
-  console.log(date)
 }
 
 const isActive = (date) => {
   return activeDay.value === date
 }
+
+const loadMoreDays = () => {
+  totalDays.value += 30
+}
+
+const reobserve = () => {
+  const lastDay = document.querySelector('.calendar-list .day:last-child')
+  if (lastDay) {
+    observer.observe(lastDay)
+  }
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(async (entry) => {
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target)
+      loadMoreDays()
+      await nextTick()
+      reobserve()
+    }
+  })
+})
+
+watchEffect(async () => {
+  await nextTick()
+  reobserve()
+})
 </script>
 <template>
   <ul class="calendar-list">
     <Day
+      class="day"
       v-for="day in days"
       :day="day"
-      :key="day"
+      :key="day.date"
       :data="data"
       :isActive="isActive(day.date)"
       @SetActiveDay="SetActiveDay(day.date)"
@@ -53,17 +82,5 @@ const isActive = (date) => {
   gap: 5px;
   margin: 20px 0;
   overflow: auto;
-}
-::-webkit-scrollbar {
-  width: 15px;
-  height: 8px;
-  background-color: #ffffff;
-  border-radius: 9em;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #acacac;
-  border-radius: 9em;
-  box-shadow: inset 1px 1px 10px #f3faf7;
 }
 </style>

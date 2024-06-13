@@ -43,37 +43,38 @@ async function changeLocalStatus(task, userId, model) {
 .title {
   font-size: 16px;
   font-weight: 500px;
-  color: black;
+  color: var(--dark-color);
 }
 
 .round {
   position: relative;
   transform: translateY(2px);
 }
+
 .round label {
-  background-color: #fff;
-  border: 3px solid #ff9d00;
+  background-color: var(--white-color);
+  border: 3px solid var(--orange-color);
   border-radius: 50%;
   cursor: pointer;
   height: 23px;
-  left: 0;
-  position: absolute;
-  top: 0;
   width: 23px;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .round label:after {
-  border: 2px solid #fff;
+  border: 2px solid var(--white-color);
   border-top: none;
   border-right: none;
   content: '';
   height: 4px;
-  left: 3px;
+  width: 12px;
   opacity: 0;
   position: absolute;
+  left: 3px;
   top: 6px;
   transform: rotate(-45deg);
-  width: 12px;
 }
 
 .round input[type='checkbox'] {
@@ -81,8 +82,8 @@ async function changeLocalStatus(task, userId, model) {
 }
 
 .round input[type='checkbox']:checked + label {
-  background-color: #ff9d00;
-  border-color: #ff9d00;
+  background-color: var(--orange-color);
+  border-color: var(--orange-color);
 }
 
 .round input[type='checkbox']:checked + label:after {
