@@ -1,5 +1,4 @@
 <script setup>
-defineProps(['title', 'btn', 'text', 'link', 'action'])
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showErrorMessageSignIn } from '../../utils/errMessages.js'
@@ -10,6 +9,8 @@ const password = ref('')
 const errMsg = ref('')
 const store = useStore()
 const router = useRouter()
+
+defineProps(['title', 'btn', 'text', 'link', 'action'])
 
 const handleSubmitSignUp = async () => {
   try {
@@ -28,30 +29,6 @@ const handleSubmitLogin = async () => {
     showErrorMessageSignIn(error, errMsg)
   }
 }
-
-// const SignUp = () => {
-//   const auth = getAuth()
-//   createUserWithEmailAndPassword(auth, email.value, password.value)
-//     .then((userCredential) => {
-//       const user = userCredential.user
-//       store.dispatch('signup', { email: email.value, password: password.value })
-//       console.log(user)
-//     })
-//     .catch((error) => {
-//       showErrorMessageSignIn(error, errMsg)
-//     })
-// }
-// const Login = () => {
-//   const auth = getAuth()
-//   signInWithEmailAndPassword(auth, email.value, password.value)
-//     .then((userCredential) => {
-//       const user = userCredential.user
-//       console.log(user)
-//     })
-//     .catch((error) => {
-//       showErrorMessageSignIn(error, errMsg)
-//     })
-// }
 
 const route = useRoute()
 const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handleSubmitSignUp())

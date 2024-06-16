@@ -21,14 +21,20 @@ const task = ref({
 let taskAdded = ref(null)
 
 const addTaskConfirm = async (task, userId) => {
-  if (task.title !== '' && task.description !== '') {
-    await addNewTask(task, userId)
-    showAddTaskMessage(taskAdded, true)
-    task.title = ''
-    task.description = ''
-  } else if (task.title === '' || task.description === '') {
-    showAddTaskMessage(taskAdded, false)
-  } else {
+  try {
+    if (task.title !== '' && task.description !== '') {
+      await addNewTask(task, userId)
+      showAddTaskMessage(taskAdded, true)
+      task.title = ''
+      task.description = ''
+    } else if (task.title === '' || task.description === '') {
+      showAddTaskMessage(taskAdded, false)
+    } else {
+      console.log(1)
+      showAddTaskMessage(taskAdded, false)
+    }
+  } catch (e) {
+    console.log(e)
     showAddTaskMessage(taskAdded, false)
   }
 }
@@ -36,7 +42,7 @@ const addTaskConfirm = async (task, userId) => {
 
 <template>
   <div class="wrapper">
-    <button @click="$router.back()" type="button" class="back">
+    <button @click="$router.push('/')" type="button" class="back">
       <IconBack />
       Today's tasks
     </button>

@@ -19,7 +19,6 @@ export const getAllTasks = async (userId) => {
           date: dateInit(doc.data().date)
         })
       })
-      console.log(tasks)
       return tasks
     }
   } catch (e) {
@@ -39,7 +38,6 @@ export const getTaskById = async (taskId, userId) => {
         checked: taskSnap.data().checked,
         date: taskSnap.data().date
       }
-      // console.log(task)
       return task
     }
   } catch (e) {
@@ -49,7 +47,6 @@ export const getTaskById = async (taskId, userId) => {
 
 export const addNewTask = async (task, id) => {
   task.date = new Date(task.date)
-  console.log(task.date)
   await addDoc(collection(db, 'users', id, 'todos'), task)
 }
 

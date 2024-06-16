@@ -1,3 +1,5 @@
+@import 'variables.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -10,14 +12,12 @@ body {
   transition: background-color 0.5s ease-in-out;
 }
 
-:root {
-  --orange-color: #ff9d00;
-  --red-color: red;
-  --white-color: white;
-  --dark-color: black;
-  --grey-color: #f1f1f1;
-  --green-color: rgb(32, 226, 106);
-  --dark-btn-hover: rgba(0, 0, 0, 0.2);
+#app {
+  max-width: 762px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 2rem;
+  font-size: 18px;
 }
 
 .dark-theme {
@@ -26,20 +26,7 @@ body {
   --white-color: black;
   --dark-color: white;
   --grey-color: #e8e8e8;
-  --dark-btn-hover: rgba(248, 244, 244, 0.2);
-}
-
-/* body {
-  background-color: var(--white-color);
-} */
-
-#app {
-  max-width: 762px;
-  height: 100vh;
-  margin: 0 auto;
-  padding: 2rem;
-  font-size: 18px;
-  /* color: var(--white-color); */
+  --dark-btn-hover: rgba(255, 255, 255, 0.5);
 }
 
 a {
@@ -108,6 +95,7 @@ button:hover {
 .buttons {
   display: flex;
   flex-direction: row;
+  gap: 20px;
   justify-content: space-evenly;
 }
 .buttons__btn {

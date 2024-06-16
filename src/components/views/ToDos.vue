@@ -23,13 +23,13 @@ watchEffect(async () => {
   }
 })
 
-function toggleTheme() {
-  document.body.classList.toggle('dark-theme')
-}
-
 watchEffect(() => {
   showCurrentDateTasks()
 }, [activeDay])
+
+function toggleTheme() {
+  document.body.classList.toggle('dark-theme')
+}
 
 async function showAllTasks() {
   showLoader()
@@ -52,8 +52,8 @@ const Logout = () => {
     <div class="container">
       <header class="header">
         <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}!</h3>
-        <button class="header__logout" @click="toggleTheme">theme</button>
-        <button class="header__logout" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
+        <button class="header__btn" @click="toggleTheme">theme</button>
+        <button class="header__btn" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
       </header>
       <section v-if="currentDateTasks" class="todos">
         <Calendar :data="data" />
@@ -91,11 +91,12 @@ const Logout = () => {
   gap: 30px;
   align-items: center;
 }
+
 .header__title {
   color: var(--dark-color);
 }
 
-.header__logout {
+.header__btn {
   padding: 8px 14px;
   font-size: 18px;
   background-color: var(--dark-color);
@@ -103,14 +104,9 @@ const Logout = () => {
   border-radius: 30px;
 }
 
-.header__logout:hover {
-  transform: scale(1.05);
-  cursor: pointer;
+.header__btn:hover {
+  box-shadow: 0 10px 40px var(--dark-btn-hover);
   font-size: 18px;
-}
-
-.todos__todo-items {
-  transition: ease-in 3s;
 }
 
 .todos__btn-add {
@@ -118,6 +114,8 @@ const Logout = () => {
   max-width: 400px;
   width: 100%;
   height: 40px;
+  font-weight: 600;
+  font-size: 16px;
   border-radius: 10px;
   border: var(--orange-color);
   background: linear-gradient(-140deg, var(--orange-color), var(--red-color));
@@ -126,7 +124,6 @@ const Logout = () => {
 }
 
 .todos__btn-add:hover {
-  cursor: pointer;
   transform: translateY(1px);
   box-shadow: 0 10px 20px var(--dark-btn-hover);
 }
@@ -136,5 +133,23 @@ const Logout = () => {
   font-weight: 800px;
   font-size: 18px;
   margin: 20px 0;
+}
+
+@media (min-width: 300px) and (max-width: 500px) {
+  .header {
+    gap: 15px;
+  }
+
+  .header__btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: var(--dark-color);
+    color: var(--white-color);
+    border-radius: 30px;
+  }
+
+  .header__title {
+    font-size: 16px;
+  }
 }
 </style>

@@ -21,14 +21,13 @@ const store = createStore({
     setAuthIsReady(state, payload) {
       state.authIsReady = payload
     },
-    setActiveDay(state, activeDay) {
-      state.activeDay = activeDay
+    setActiveDay(state, payload) {
+      state.activeDay = payload
     }
   },
 
   actions: {
     async signup(context, { email, password }) {
-      // async code
       const response = await createUserWithEmailAndPassword(auth, email, password)
       if (response) {
         context.commit('setUser', response.user)
@@ -53,18 +52,6 @@ const store = createStore({
   }
 })
 
-// const SignUp = () => {
-// const auth = getAuth()
-// createUserWithEmailAndPassword(auth, email.value, password.value)
-//   .then((userCredential) => {
-//     const user = userCredential.user
-//     store.dispatch('signup', { email: email.value, password: password.value })
-//     console.log(user)
-//   })
-//   .catch((error) => {
-//     showErrorMessageSignIn(error, errMsg)
-//   })
-// }
 const unsub = onAuthStateChanged(auth, (user) => {
   store.commit('setAuthIsReady', true)
   store.commit('setUser', user)
