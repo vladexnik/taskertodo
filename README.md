@@ -1,4 +1,4 @@
-# TaskerToDo
+# [TaskerToDo](https://taskervue.web.app/)
 
 ## 1. About project:
 
@@ -68,7 +68,7 @@ Compile and Minify for Production:
 $ npm run build
 ```
 
-# 5. Database Snapshots
+## 5. Database Snapshots
 
 Structure of users and data in firebase:
 
