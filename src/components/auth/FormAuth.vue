@@ -1,39 +1,37 @@
 <script setup>
-defineProps(['title', 'btn', 'text', 'link', 'action'])
-import { ref, computed } from 'vue'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { showErrorMessageSignIn } from '../../utils/errMessages.js'
+import { useStore } from 'vuex'
 
 const email = ref('')
 const password = ref('')
+const errMsg = ref('')
+const store = useStore()
+const router = useRouter()
 
-const SignUp = () => {
-  const auth = getAuth()
-  createUserWithEmailAndPassword(auth, email.value, password.value)
-    .then((userCredential) => {
-      const user = userCredential.user
-      console.log(user)
-    })
-    .catch((error) => {
-      alert(error.message)
-    })
+defineProps(['title', 'btn', 'text', 'link', 'action'])
+
+const handleSubmitSignUp = async () => {
+  try {
+    await store.dispatch('signup', { email: email.value, password: password.value })
+    router.push('/')
+  } catch (error) {
+    showErrorMessageSignIn(error, errMsg)
+  }
 }
-const Login = () => {
-  const auth = getAuth()
-  signInWithEmailAndPassword(auth, email.value, password.value)
-    .then((userCredential) => {
-      const user = userCredential.user
-      console.log(user)
-    })
-    .catch((error) => {
-      alert(error.message)
-    })
+
+const handleSubmitLogin = async () => {
+  try {
+    await store.dispatch('login', { email: email.value, password: password.value })
+    router.push('/')
+  } catch (error) {
+    showErrorMessageSignIn(error, errMsg)
+  }
 }
+
 const route = useRoute()
-const currentPath = computed(() => route.path)
-console.log(route.path, currentPath)
-
-const formAction = computed(() => (route.path === '/login' ? Login() : SignUp()))
+const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handleSubmitSignUp())
 </script>
 
 <template>
@@ -45,8 +43,17 @@ const formAction = computed(() => (route.path === '/login' ? Login() : SignUp())
         <label></label>
       </div>
       <div class="field">
-        <input type="password" placeholder="Password" v-model="password" required />
+        <input
+          type="password"
+          name="password"
+          autocomplete="on"
+          placeholder="Password"
+          v-model="password"
+          required
+        />
       </div>
+      <p class="message" v-if="errMsg">{{ errMsg }}</p>
+
       <div class="field btn">
         <input type="submit" :value="btn" />
       </div>
@@ -59,18 +66,11 @@ const formAction = computed(() => (route.path === '/login' ? Login() : SignUp())
 </template>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
 .wrapper {
   margin: 0 auto;
-  margin-top: 100px;
-  width: 380px;
-  background: #fff;
+  margin-top: 70px;
+  max-width: 380px;
+  background: var(--white-color);
   border-radius: 15px;
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
 }
@@ -79,13 +79,14 @@ const formAction = computed(() => (route.path === '/login' ? Login() : SignUp())
   font-weight: 600;
   text-align: center;
   line-height: 100px;
-  color: #fff;
+  color: white;
   user-select: none;
   border-radius: 15px 15px 0 0;
-  background: linear-gradient(-105deg, #c850c0, #394fbd);
+  background: linear-gradient(-90deg, var(--orange-color), var(--red-color));
 }
 .wrapper form {
   padding: 10px 30px 50px 30px;
+  background-color: white;
 }
 .wrapper form .field {
   height: 50px;
@@ -97,49 +98,55 @@ const formAction = computed(() => (route.path === '/login' ? Login() : SignUp())
   height: 100%;
   width: 100%;
   outline: none;
-  font-size: 17px;
-  padding-left: 20px;
-  border: 1px solid lightgrey;
+  font-size: 16px;
+  padding: 0 15px;
+  border: 1px solid var(--grey-color);
   border-radius: 25px;
   transition: all 0.3s ease;
 }
 .wrapper form .field input:focus,
 form .field input:valid {
-  border-color: #4158d0;
+  border-color: grey;
 }
 
 form .content label {
-  color: #262626;
+  color: var(--dark-color);
   user-select: none;
   padding-left: 5px;
 }
 
 form .field input[type='submit'] {
-  color: #fff;
+  color: white;
   border: none;
   padding-left: 0;
   margin-top: 10px;
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
-  background: linear-gradient(-105deg, #c850c0, #394fbd);
+  background: linear-gradient(-90deg, var(--orange-color), var(--red-color));
   transition: all 0.3s ease;
 }
 form .field input[type='submit']:active {
   transform: scale(0.95);
 }
 form .signup-link {
-  color: #262626;
   margin-top: 20px;
   text-align: center;
 }
 form .pass-link a,
 form .signup-link a {
-  color: #4158d0;
+  color: var(--orange-color);
   text-decoration: none;
 }
 form .pass-link a:hover,
 form .signup-link a:hover {
   text-decoration: underline;
+}
+
+.message {
+  text-align: left;
+  padding-left: 10px;
+  font-weight: 600;
+  color: var(--red-color);
 }
 </style>

@@ -1,58 +1,155 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue'
-import { getAuth, signOut } from 'firebase/auth'
+import ToDoItem from './ToDoItem.vue'
+import Loader from '../loader/Loader.vue'
+import Calendar from './Calendar/Calendar.vue'
+import { ref, computed, watchEffect } from 'vue'
+import { useStore } from 'vuex'
+import { getAllTasks } from '../api/service'
+import { useLoader } from '../composables/useLoader'
+import dayjs from 'dayjs'
 
-const data = ref([
-  { id: 0, title: 'find bird', description: 'Fly away w d dith bird' },
-  { id: 1, title: 'take ddf bird', description: 'Fly a df dfway with bird' },
-  { id: 2, title: 'find flight', description: 'Fly awdf f day with bird' },
-  { id: 4, title: 'fin plane', description: 'Fly away rd' },
-  { id: 5, title: 'find kill', description: 'kilian heay d' }
-])
-console.log(data)
+const store = useStore()
+const user = computed(() => store.state.user)
+const userId = computed(() => store.state.user?.uid)
+const authIsReady = computed(() => store.state.authIsReady)
+const activeDay = computed(() => store.state?.activeDay)
+let data = ref(null)
+let currentDateTasks = ref(null)
+const { isLoading, showLoader, hideLoader } = useLoader()
 
-const name = ref('')
-
-onBeforeMount(() => {
-  const user = getAuth().currentUser
-  if (user) {
-    name.value = user.email.split('@')[0]
+watchEffect(async () => {
+  if (authIsReady.value) {
+    await showAllTasks()
   }
 })
 
-const LogOut = () => {
-  const auth = getAuth()
-  signOut(auth)
-    .then(() => {
-      // Sign-out successful.
-    })
-    .catch((error) => {
-      alert(error)
-    })
+watchEffect(() => {
+  showCurrentDateTasks()
+}, [activeDay])
+
+function toggleTheme() {
+  document.body.classList.toggle('dark-theme')
+}
+
+async function showAllTasks() {
+  showLoader()
+  data.value = await getAllTasks(userId.value)
+  hideLoader()
+}
+
+function showCurrentDateTasks() {
+  currentDateTasks.value = data.value?.filter((task) => task.date === activeDay.value)
+}
+
+const Logout = () => {
+  store.dispatch('logout')
+  store.commit('setActiveDay', dayjs().format('YYYY-MM-DD'))
 }
 </script>
 
 <template>
-  <h1>Welcome, {{ name }}</h1>
-  <button class="logout" @click="LogOut">Logout</button>
-  <div class="notes">
-    <ul>
-      <li v-for="note in data" :key="note.id">
-        <p>
-          <strong>{{ note.title }}</strong>
-        </p>
-        <p>{{ note.description }}</p>
-      </li>
-    </ul>
-  </div>
+  <template v-if="authIsReady">
+    <div class="container">
+      <header class="header">
+        <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}!</h3>
+        <button class="header__btn" @click="toggleTheme">theme</button>
+        <button class="header__btn" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
+      </header>
+      <section v-if="currentDateTasks" class="todos">
+        <Calendar :data="data" />
+        <p class="todos__tasker-count">{{ currentDateTasks?.length || 'No' }} Tasks For Day</p>
+        <ul class="todos__todo-items">
+          <ToDoItem
+            v-for="task in currentDateTasks"
+            :task="task"
+            :title="task.title"
+            :key="task.id"
+            v-model="task.checked"
+          />
+        </ul>
+        <button
+          type="button"
+          id="show-modal"
+          @click="$router.push('/todo/newtodo')"
+          class="todos__btn-add"
+        >
+          Add a New Task
+        </button>
+      </section>
+      <div v-else>
+        <Loader :isLoading="isLoading" />
+      </div>
+    </div>
+  </template>
 </template>
 
 <style scoped>
-.notes {
-  margin-top: 100px;
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 30px;
+  align-items: center;
 }
-.logout {
-  padding: 3px;
-  background-color: blue;
+
+.header__title {
+  color: var(--dark-color);
+}
+
+.header__btn {
+  padding: 8px 14px;
+  font-size: 18px;
+  background-color: var(--dark-color);
+  color: var(--white-color);
+  border-radius: 30px;
+}
+
+.header__btn:hover {
+  box-shadow: 0 10px 40px var(--dark-btn-hover);
+  font-size: 18px;
+}
+
+.todos__btn-add {
+  margin-top: 20px;
+  max-width: 400px;
+  width: 100%;
+  height: 40px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  border: var(--orange-color);
+  background: linear-gradient(-140deg, var(--orange-color), var(--red-color));
+  color: var(--white-color);
+  margin-bottom: 20px;
+}
+
+.todos__btn-add:hover {
+  transform: translateY(1px);
+  box-shadow: 0 10px 20px var(--dark-btn-hover);
+}
+
+.todos__tasker-count {
+  color: var(--dark-color);
+  font-weight: 800px;
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+@media (min-width: 300px) and (max-width: 500px) {
+  .header {
+    gap: 15px;
+  }
+
+  .header__btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: var(--dark-color);
+    color: var(--white-color);
+    border-radius: 30px;
+  }
+
+  .header__title {
+    font-size: 16px;
+  }
 }
 </style>

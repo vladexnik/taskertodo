@@ -1,35 +1,127 @@
-@import './base.css';
+@import 'variables.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-a,
-.green {
+body {
+  background-color: var(--white-color);
+  transition: background-color 0.5s ease-in-out;
+}
+
+#app {
+  max-width: 762px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 2rem;
+  font-size: 18px;
+}
+
+.dark-theme {
+  --orange-color: #ff9d00;
+  --red-color: rgb(237, 73, 73);
+  --white-color: black;
+  --dark-color: white;
+  --grey-color: #e8e8e8;
+  --dark-btn-hover: rgba(255, 255, 255, 0.5);
+}
+
+a {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
   padding: 3px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+ul {
+  padding: 0;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+li {
+  padding: 5px 0;
+  list-style: none;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+input,
+textarea {
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  font-size: 14px;
+}
+textarea:disabled,
+input:disabled {
+  background-color: var(--grey-color);
+}
+
+textarea {
+  resize: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+  height: 8px;
+  border-radius: 9em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #acacac;
+  border-radius: 9em;
+  box-shadow: inset 1px 1px 10px var(--grey-color);
+}
+
+.wrapper {
+  max-width: 600px;
+}
+
+.form-item__label {
+  display: flex;
+  flex-direction: column;
+  color: var(--dark-color);
+}
+
+.form-item__input {
+  border: 0px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid var(--dark-color);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-evenly;
+}
+.buttons__btn {
+  font-size: 18px;
+  height: 40px;
+  padding: 5px;
+  width: 100px;
+  border-radius: 10px;
+  color: var(--white-color);
+  background-color: var(--orange-color);
+  border: var(--orange-color);
+}
+.buttons__btn:hover {
+  cursor: pointer;
+  transform: translateY(1px);
+  box-shadow: 0 10px 20px var(--dark-btn-hover);
+}
+
+.back {
+  height: 25px;
+  border: none;
+  background-color: transparent;
+  margin-bottom: 20px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--dark-color);
 }
