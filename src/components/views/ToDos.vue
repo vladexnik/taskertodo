@@ -7,6 +7,7 @@ import { useStore } from 'vuex'
 import { getAllTasks } from '../api/service'
 import { useLoader } from '../composables/useLoader'
 import dayjs from 'dayjs'
+import router from '@/router'
 
 const store = useStore()
 const user = computed(() => store.state.user)
@@ -44,6 +45,7 @@ function showCurrentDateTasks() {
 const Logout = () => {
   store.dispatch('logout')
   store.commit('setActiveDay', dayjs().format('YYYY-MM-DD'))
+  router.push('/login')
 }
 </script>
 
@@ -51,13 +53,13 @@ const Logout = () => {
   <template v-if="authIsReady">
     <div class="container">
       <header class="header">
-        <h3 class="header__title">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}!</h3>
+        <h3 class="header__title" data-cy="header__title-welcome">Welcome to tasker, {{ user?.email.split('@')[0] || 'user' }}!</h3>
         <button class="header__btn" @click="toggleTheme">theme</button>
-        <button class="header__btn" @click="Logout">{{ user ? 'Logout' : 'Login' }}</button>
+        <button class="header__btn" @click="Logout" data-cy="header__btn-logout">{{ user ? 'Logout' : 'Login' }}</button>
       </header>
       <section v-if="currentDateTasks" class="todos">
         <Calendar :data="data" />
-        <p class="todos__tasker-count">{{ currentDateTasks?.length || 'No' }} Tasks For Day</p>
+        <p class="todos__tasker-count" data-cy="todos__tasker-count">{{ currentDateTasks?.length || 'No' }} Tasks For Day</p>
         <ul class="todos__todo-items">
           <ToDoItem
             v-for="task in currentDateTasks"
@@ -105,7 +107,7 @@ const Logout = () => {
 }
 
 .header__btn:hover {
-  box-shadow: 0 10px 40px var(--dark-btn-hover);
+  box-shadow: 0 4px 3px var(--dark-btn-hover);
   font-size: 18px;
 }
 
@@ -125,7 +127,6 @@ const Logout = () => {
 
 .todos__btn-add:hover {
   transform: translateY(1px);
-  box-shadow: 0 10px 20px var(--dark-btn-hover);
 }
 
 .todos__tasker-count {

@@ -24,6 +24,7 @@ const handleSubmitSignUp = async () => {
 const handleSubmitLogin = async () => {
   try {
     await store.dispatch('login', { email: email.value, password: password.value })
+    console.log('submitttt');
     router.push('/')
   } catch (error) {
     showErrorMessageSignIn(error, errMsg)
@@ -31,15 +32,20 @@ const handleSubmitLogin = async () => {
 }
 
 const route = useRoute()
-const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handleSubmitSignUp())
+const formAction = () => (route?.path === '/login' ? handleSubmitLogin() : handleSubmitSignUp())
 </script>
-
 <template>
   <div class="wrapper">
-    <div class="title">{{ title }}</div>
-    <form @submit.prevent="formAction">
+    <div class="title" data-cy="title-login">{{ title }}</div>
+    <form @submit.prevent="formAction()" data-type="submit">
       <div class="field">
-        <input type="text" placeholder="Email Address" v-model="email" required />
+        <input 
+          type="text" 
+          data-cy="email-input" 
+          placeholder="Email Address" 
+          v-model="email" 
+          required 
+        />
         <label></label>
       </div>
       <div class="field">
@@ -50,12 +56,13 @@ const formAction = () => (route.path === '/login' ? handleSubmitLogin() : handle
           placeholder="Password"
           v-model="password"
           required
+          data-cy="password-input"
         />
       </div>
       <p class="message" v-if="errMsg">{{ errMsg }}</p>
 
       <div class="field btn">
-        <input type="submit" :value="btn" />
+        <input type="submit" data-type="submit" :value="btn" />
       </div>
       <div class="signup-link">
         {{ text }}

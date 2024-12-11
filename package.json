@@ -7,14 +7,18 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test:unit": "vitest",
+    "test:unit:coverage": "vitest run --coverage",
+    "test:e2e": "start-server-and-test preview http://localhost:5174 'cypress run --e2e'",
+    "test:e2e:dev": "start-server-and-test 'vite dev --port 5174' http://localhost:5174 'cypress open --e2e'",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "prepare": "husky install"
   },
   "dependencies": {
     "dayjs": "^1.11.11",
-    "dotenv": "^16.4.5",
-    "firebase": "9.1",
+    "dotenv": "^16.4.7",
+    "firebase": "^11.0.2",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2",
     "vuex": "^4.0.2"
@@ -27,12 +31,19 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vitest/coverage-v8": "^2.1.8",
     "@vue/eslint-config-prettier": "^9.0.0",
-    "eslint": "^8.57.0",
+    "@vue/test-utils": "^2.4.6",
+    "cypress": "^13.16.1",
+    "eslint": "^9.16.0",
+    "eslint-plugin-cypress": "^4.1.0",
     "eslint-plugin-vue": "^9.23.0",
     "husky": "^8.0.0",
+    "jsdom": "^25.0.1",
     "lint-staged": "^15.2.5",
     "prettier": "^3.2.5",
-    "vite": "^5.2.8"
+    "start-server-and-test": "^2.0.8",
+    "vite": "^5.2.8",
+    "vitest": "^2.1.8"
   }
 }
