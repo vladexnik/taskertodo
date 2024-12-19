@@ -14,7 +14,7 @@ describe('check FormAuth component', () => {
         link: '/signup'
       }
     })
-
+    console.log(FormAuthWrapper.vm)
     expect(FormAuthWrapper.text()).toContain('Login to tasker')
     expect(FormAuthWrapper.text()).toContain('Login')
     expect(FormAuthWrapper.text()).toContain('Not a member?')
@@ -57,6 +57,7 @@ describe('check FormAuth component', () => {
         link: '/login'
       }
     })
+    
     expect(FormAuthWrapperSignUp.text()).toContain('Sign up to tasker')
     expect(FormAuthWrapperSignUp.text()).toContain('Already have an account?')
     expect(FormAuthWrapperSignUp.text()).toContain('Login')
