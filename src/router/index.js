@@ -1,21 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../components/views/HomePage.vue'
-import AboutPage from '../components/views/AboutPage.vue'
 import LogIn from '../components/auth/LogIn.vue'
 import SignUp from '../components/auth/SignUp.vue'
 import ToDos from '../components/views/ToDos.vue'
+import ToDoDetails from '../components/views/ToDoDetails.vue'
+import TodoAdd from '../components/views/TodoAdd.vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import NotFound from '@/components/views/NotFound.vue'
 
 const routes = [
-  { path: '/', name: 'HomePage', component: HomePage },
   { path: '/login', name: 'LogIn', component: LogIn },
   { path: '/signup', name: 'SignUp', component: SignUp },
-  { path: '/about', name: 'About', component: AboutPage },
-  { path: '/todos', name: 'ToDos', component: ToDos }
-  // { path: '/', name: 'Home', component: HomePage }
+  { path: '/', name: 'ToDos', component: ToDos },
+  { path: '/todo/:id', name: 'ToDoDetails', component: ToDoDetails },
+  { path: '/todo/newtodo', name: 'TodoAdd', component: TodoAdd },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+const auth = getAuth()
+
+router.beforeEach((to, from, next) => {
+  onAuthStateChanged(auth, (user) => {
+    if (user && (to.path === '/login' || to.path === '/signup')) {
+      next('/')
+    } else if (!user && to.path !== '/login' && to.path !== '/signup') {
+      next('/login')
+    } else {
+      next()
+    }
+  })
+})
+
 export default router
